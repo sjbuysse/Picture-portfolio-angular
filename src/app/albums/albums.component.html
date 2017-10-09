@@ -1,0 +1,17 @@
+<section class="jumbotron text-center">
+  <h1 class="jumbotron-heading">Albums</h1>
+  <p class="text-muted lead">Here you find a couple of my selections. I love shooting animals, and nature.</p>
+</section>
+<div class="album text-muted">
+  <div class="container">
+    <div class="row">
+      <div class="card" *ngFor="let album of albums | async">
+        <img class="card-img-top" src="http://via.placeholder.com/350x150" alt="Card image cap">
+        <div class="card-body">
+          <p class="card-text lead">{{album.name}}</p>
+          <p class="card-text">{{album.caption}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
