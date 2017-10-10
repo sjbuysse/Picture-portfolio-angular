@@ -14,13 +14,15 @@ import { SelectedAlbumService } from './selected-album.service';
 
 import { AlbumDetailsComponent } from './albums/album-details/album-details.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlbumsComponent,
     AlbumDetailsComponent,
-    NavbarComponent
+    NavbarComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

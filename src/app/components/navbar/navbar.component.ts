@@ -8,12 +8,11 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  title: Observable<string>;
+  title: Observable<string> = this._selectedAlbumService.getSelectedAlbumTitle();
 
   constructor(private _selectedAlbumService: SelectedAlbumService) { }
 
   ngOnInit() {
-    this.title = this._selectedAlbumService.getSelectedAlbumTitle();
   }
 
 }

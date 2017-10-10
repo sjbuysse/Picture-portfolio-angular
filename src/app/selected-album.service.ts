@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class SelectedAlbumService {
-  private _selectedAlbum = new Subject();
+  private _selectedAlbum = new Subject<Album>();
 
   constructor() { }
 

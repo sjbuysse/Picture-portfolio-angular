@@ -12,6 +12,9 @@ import {SelectedAlbumService} from '../../selected-album.service';
 })
 export class AlbumDetailsComponent implements OnInit {
   album: Album;
+  actions = {
+    handleClickCard: (cardObject) => console.log(cardObject)
+  }
 
   constructor(private _route: ActivatedRoute, private _albumService: AlbumService, private _selectedAlbumService: SelectedAlbumService) { }
 
