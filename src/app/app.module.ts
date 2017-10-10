@@ -10,6 +10,8 @@ import { StoreModule } from '@ngrx/store';
 import { AlbumsComponent } from './albums/albumlist/albumlist.component';
 
 import { AlbumService } from './albums/album.service';
+import { SelectedAlbumService } from './selected-album.service';
+
 import { AlbumDetailsComponent } from './albums/album-details/album-details.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
@@ -32,7 +34,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     ])
   ],
   providers: [
-    AlbumService
+    AlbumService,
+    SelectedAlbumService
   ],
   bootstrap: [AppComponent]
 })
