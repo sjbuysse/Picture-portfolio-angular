@@ -11,12 +11,14 @@ import { AlbumsComponent } from './albums/albumlist/albumlist.component';
 
 import { AlbumService } from './albums/album.service';
 import { AlbumDetailsComponent } from './albums/album-details/album-details.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlbumsComponent,
-    AlbumDetailsComponent
+    AlbumDetailsComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
