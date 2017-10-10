@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {AlbumService} from './album.service';
-import {Album} from '../statemanagement/state/data/data.state';
+import {AlbumService} from '../album.service';
+import {Album} from '../../statemanagement/state/data/data.state';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-albums',
-  templateUrl: './albums.component.html',
-  styleUrls: ['./albums.component.css']
+  templateUrl: './albumlist.component.html',
+  styleUrls: ['./albumlist.component.css']
 })
 export class AlbumsComponent implements OnInit {
   albums: Observable<Album[]>;

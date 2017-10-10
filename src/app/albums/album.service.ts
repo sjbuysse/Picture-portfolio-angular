@@ -12,6 +12,10 @@ export class AlbumService implements OnInit{
     return this._store.select(state => state.data.albums);
   }
 
+  getSingleAlbum(id: string): Observable<Album> {
+    return this._store.select(state => state.data.albums.find(album => album.id === id));
+  }
+
   ngOnInit() {
   }
 }
