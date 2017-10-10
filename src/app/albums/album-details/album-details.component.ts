@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Album} from '../../statemanagement/state/data/data.state';
+import {Album, Image} from '../../statemanagement/state/data/data.state';
 import {AlbumService} from '../album.service';
 import {ActivatedRoute} from '@angular/router';
 import {SelectedAlbumService} from '../../selected-album.service';
@@ -13,10 +12,16 @@ import {SelectedAlbumService} from '../../selected-album.service';
 export class AlbumDetailsComponent implements OnInit {
   album: Album;
   actions = {
-    handleClickCard: (cardObject) => console.log(cardObject)
+    handleClickCard: (cardObject) => this._openCardModal(cardObject)
   }
 
-  constructor(private _route: ActivatedRoute, private _albumService: AlbumService, private _selectedAlbumService: SelectedAlbumService) { }
+  constructor(private _route: ActivatedRoute,
+              private _albumService: AlbumService,
+              private _selectedAlbumService: SelectedAlbumService) { }
+
+  private _openCardModal(cardObject: Image) {
+
+  }
 
   ngOnInit() {
     const id = this._route.snapshot.paramMap.get('id');

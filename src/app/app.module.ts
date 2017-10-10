@@ -24,6 +24,9 @@ import { CardComponent } from './components/card/card.component';
     NavbarComponent,
     CardComponent
   ],
+  entryComponents: [
+    CardComponent
+  ],
   imports: [
     BrowserModule,
     StoreModule.forRoot(rootReducer, {

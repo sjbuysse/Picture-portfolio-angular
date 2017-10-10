@@ -12,8 +12,8 @@ import { Router } from '@angular/router';
 export class AlbumsComponent implements OnInit {
   albums: Observable<Album[]>;
   actions = {
-    handleClickCard: (cardObject) => this._navigateToAlbumDetails(cardObject)
-  }
+    handleClickCard: (album) => this._navigateToAlbumDetails(album)
+  };
 
   constructor(private _albumService: AlbumService, private _router: Router) { }
 
