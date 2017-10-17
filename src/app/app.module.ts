@@ -15,6 +15,7 @@ import { SelectedAlbumService } from './selected-album.service';
 import { AlbumDetailsComponent } from './albums/album-details/album-details.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CardComponent } from './components/card/card.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CardComponent } from './components/card/card.component';
     AlbumsComponent,
     AlbumDetailsComponent,
     NavbarComponent,
-    CardComponent
+    CardComponent,
+    ModalComponent
   ],
   entryComponents: [
     CardComponent

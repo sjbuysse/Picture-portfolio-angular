@@ -10,17 +10,18 @@ import {SelectedAlbumService} from '../../selected-album.service';
   styleUrls: ['./album-details.component.scss']
 })
 export class AlbumDetailsComponent implements OnInit {
+  selectedImage: Image;
   album: Album;
   actions = {
-    handleClickCard: (cardObject) => this._openCardModal(cardObject)
-  }
+    handleClickCard: (image) => this._setSelectedImage(image)
+  };
 
   constructor(private _route: ActivatedRoute,
               private _albumService: AlbumService,
               private _selectedAlbumService: SelectedAlbumService) { }
 
-  private _openCardModal(cardObject: Image) {
-
+  private _setSelectedImage(image: Image) {
+    this.selectedImage = image;
   }
 
   ngOnInit() {
