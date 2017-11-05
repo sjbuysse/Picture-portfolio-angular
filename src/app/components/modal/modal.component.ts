@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Image} from '../../statemanagement/state/data/data.state';
+import {Image} from 'app/model/image.interface';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-modal',
@@ -7,7 +8,7 @@ import {Image} from '../../statemanagement/state/data/data.state';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  @Input() image: Image;
+  @Input() image: Observable<Image>;
 
   constructor() { }
 

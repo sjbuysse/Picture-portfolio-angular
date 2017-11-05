@@ -1,9 +1,9 @@
 import {DataState, initialDataState} from './data/data.state';
 
 export type AppState = Readonly<{
-  data: DataState;
+  data: DataState,
 }>;
 
 export const initialAppState = {
-  data: initialDataState
+  data: initialDataState,
 };

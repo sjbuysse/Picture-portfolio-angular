@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Album, Image} from '../../statemanagement/state/data/data.state';
+import {Album} from 'app/model/album.interface';
+import {Image} from 'app/model/image.interface';
 
 @Component({
   selector: 'app-card',

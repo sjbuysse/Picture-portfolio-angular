@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
-import {Image} from '../../statemanagement/state/data/data.state';
+import {Image} from 'app/model/image.interface';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()

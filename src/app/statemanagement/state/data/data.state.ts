@@ -1,19 +1,10 @@
-export interface Image {
-  id: string;
-  name: string;
-  caption: string;
-  url: string;
-}
-
-export interface Album {
-  id: string;
-  name: string;
-  caption: string;
-  images: Image[];
-}
+import { Image } from 'app/model/image.interface';
+import { Album } from 'app/model/album.interface';
 
 export type DataState = Readonly<{
   albums: Album[];
+  selectedAlbum: Album;
+  selectedImage: Image;
 }>;
 
 
@@ -162,4 +153,6 @@ export const initialDataState = {
       images: []
     },
     ],
+  selectedAlbum: null,
+  selectedImage: null
 };

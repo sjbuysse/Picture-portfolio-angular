@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SelectedAlbumService} from '../../selected-album.service';
 import {Observable} from 'rxjs/Observable';
+import {Album} from 'app/model/album.interface';
+import {SelectedAlbumSandbox} from '../../sandboxes/selected-album.sandbox';
 
 @Component({
   selector: 'app-navbar',
@@ -8,9 +9,9 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  title: Observable<string> = this._selectedAlbumService.getSelectedAlbumTitle();
+  selectedAlbum$: Observable<Album> = this._selectedAlbumSandbox.selectedAlbum$;
 
-  constructor(private _selectedAlbumService: SelectedAlbumService) { }
+  constructor(private _selectedAlbumSandbox: SelectedAlbumSandbox) { }
 
   ngOnInit() {
   }

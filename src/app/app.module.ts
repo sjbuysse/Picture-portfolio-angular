@@ -10,12 +10,13 @@ import { StoreModule } from '@ngrx/store';
 import { AlbumsComponent } from './albums/albumlist/albumlist.component';
 
 import { AlbumService } from './albums/album.service';
-import { SelectedAlbumService } from './selected-album.service';
 
 import { AlbumDetailsComponent } from './albums/album-details/album-details.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CardComponent } from './components/card/card.component';
 import { ModalComponent } from './components/modal/modal.component';
+import {SelectedAlbumSandbox} from './sandboxes/selected-album.sandbox';
+import {AlbumSandbox} from './sandboxes/albums.sandbox';
 
 @NgModule({
   declarations: [
@@ -37,12 +38,13 @@ import { ModalComponent } from './components/modal/modal.component';
     RouterModule.forRoot([
       {path: 'albums', component: AlbumsComponent},
       {path: 'albums/:id', component: AlbumDetailsComponent},
-      {path: '', redirectTo: 'albums', pathMatch: 'full'}
+      {path: '', redirectTo: 'albums', pathMatch: 'full'},
     ])
   ],
   providers: [
     AlbumService,
-    SelectedAlbumService
+    AlbumSandbox,
+    SelectedAlbumSandbox
   ],
   bootstrap: [AppComponent]
 })

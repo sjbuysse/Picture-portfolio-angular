@@ -1,6 +1,6 @@
 import {type} from '../util';
 import {Action} from '@ngrx/store';
-import {Album} from '../../state/data/data.state';
+import {Album} from 'app/model/album.interface';
 
 export const ActionTypes = {
   ADD_ALBUM: type<'DATA_ADD_ALBUM'>('DATA_ADD_ALBUM'),

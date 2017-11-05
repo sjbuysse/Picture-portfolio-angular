@@ -1,6 +1,6 @@
 import {ActionReducer} from '@ngrx/store';
-import {Album} from '../../state/data/data.state';
-import * as albumActions from '../../actions/data/albums.actions';
+import {Album} from 'app/model/album.interface';
+import * as albumActions from 'app/statemanagement/actions/data/albums.actions';
 
 export const albumReducer: ActionReducer<Album[]> = (
   state = [], action: albumActions.Actions

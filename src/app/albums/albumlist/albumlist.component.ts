@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AlbumService } from '../album.service';
-import { Album } from '../../statemanagement/state/data/data.state';
+import { Album } from 'app/model/album.interface';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
+import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
 
 @Component({
   selector: 'app-albums',
@@ -15,14 +15,14 @@ export class AlbumsComponent implements OnInit {
     handleClickCard: (album) => this._navigateToAlbumDetails(album)
   };
 
-  constructor(private _albumService: AlbumService, private _router: Router) { }
+  constructor(private _albumSandbox: AlbumSandbox, private _router: Router) { }
 
   _navigateToAlbumDetails(album: Album) {
     this._router.navigate([`/albums/${album.id}`]);
   }
 
   ngOnInit() {
-    this.albums = this._albumService.getAlbums();
+    this.albums = this._albumSandbox.albums$;
   }
 
 }
