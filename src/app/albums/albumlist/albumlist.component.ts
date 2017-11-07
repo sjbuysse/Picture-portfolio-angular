@@ -3,6 +3,7 @@ import { Album } from 'app/model/album.interface';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
+import {AngularFireAuth} from 'angularfire2/auth';
 
 @Component({
   selector: 'app-albums',
@@ -15,7 +16,11 @@ export class AlbumsComponent implements OnInit {
     handleClickCard: (album) => this._navigateToAlbumDetails(album)
   };
 
-  constructor(private _albumSandbox: AlbumSandbox, private _router: Router) { }
+  constructor(
+    private _albumSandbox: AlbumSandbox,
+    private _router: Router,
+    public  afAuth: AngularFireAuth
+  ) { }
 
   _navigateToAlbumDetails(album: Album) {
     this._router.navigate([`/albums/${album.id}`]);

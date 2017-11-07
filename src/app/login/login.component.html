@@ -1,0 +1,22 @@
+<div class="login-page d-flex justify-content-center">
+  <div *ngIf="user; else showLogin" class="mt-5">
+    <p class="lead">You've logged in successfully!</p>
+    <button [routerLink]="['']">Go Home</button>
+    <button (click)="logout()">Logout</button>
+  </div>
+  <ng-template #showLogin>
+  <div class="login-wrapper mt-5">
+    <form [formGroup]="formGroup">
+      <div class="form-group">
+        <input type="email" class="form-control" id="email" [class.has-value]="formGroup.get('email').value" [formControl]="formGroup.get('email')">
+        <label for="email" class="floating-label">Email address</label>
+      </div>
+      <div class="form-group mt-4">
+        <input type="password" class="form-control" id="password" [class.has-value]="formGroup.get('password').value" [formControl]="formGroup.get('password')">
+        <label for="email" class="floating-label">Password</label>
+      </div>
+      <button type="submit" class="btn btn-primary" (click)="login()">Submit</button>
+    </form>
+  </div>
+</ng-template>
+</div>

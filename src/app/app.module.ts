@@ -17,6 +17,11 @@ import { CardComponent } from './components/card/card.component';
 import { ModalComponent } from './components/modal/modal.component';
 import {SelectedAlbumSandbox} from './sandboxes/selected-album.sandbox';
 import {AlbumSandbox} from './sandboxes/albums.sandbox';
+import {AngularFireModule} from 'angularfire2';
+import {environment} from '../environments/environment';
+import {AngularFireAuthModule} from 'angularfire2/auth';
+import { LoginComponent } from './login/login.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,21 +30,26 @@ import {AlbumSandbox} from './sandboxes/albums.sandbox';
     AlbumDetailsComponent,
     NavbarComponent,
     CardComponent,
-    ModalComponent
+    ModalComponent,
+    LoginComponent
   ],
   entryComponents: [
     CardComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     StoreModule.forRoot(rootReducer, {
       initialState: initialAppState
     }),
     RouterModule.forRoot([
+      {path: 'admin', component: LoginComponent},
       {path: 'albums', component: AlbumsComponent},
       {path: 'albums/:id', component: AlbumDetailsComponent},
       {path: '', redirectTo: 'albums', pathMatch: 'full'},
-    ])
+    ]),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule
   ],
   providers: [
     AlbumService,

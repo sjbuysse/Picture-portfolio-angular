@@ -1,0 +1,21 @@
+.form-group {
+  position: relative;
+  .floating-label {
+    position: absolute;
+    pointer-events: none;
+    left: 0.5rem;
+    top: 0.5rem;
+    transition: 0.2s ease all;
+    z-index: 3;
+  }
+  select:focus~.floating-label,
+  select.has-value~.floating-label,
+  input:focus~.floating-label,
+  input.has-value~.floating-label,
+  textarea:focus~.floating-label,
+  textarea.has-value~.floating-label {
+    top: -1.125rem;
+    left: 0rem;
+    font-size: 0.625rem;
+  }
+}
