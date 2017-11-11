@@ -19,9 +19,12 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.buildForm();
+    console.log(this.formGroup.get('password').value);
+    console.log(this.formGroup.get('email').value);
   }
 
   login() {
+    console.log(this.formGroup.get('password').value);
     const email = this.formGroup.get('email').value;
     const password = this.formGroup.get('password').value;
     this._afAuth.auth.signInWithEmailAndPassword(email, password)

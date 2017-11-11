@@ -22,6 +22,7 @@ import {environment} from '../environments/environment';
 import {AngularFireAuthModule} from 'angularfire2/auth';
 import { LoginComponent } from './login/login.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {SelectedImageSandbox} from './sandboxes/selected-image.sandbox';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {ReactiveFormsModule} from '@angular/forms';
   providers: [
     AlbumService,
     AlbumSandbox,
-    SelectedAlbumSandbox
+    SelectedAlbumSandbox,
+    SelectedImageSandbox
   ],
   bootstrap: [AppComponent]
 })
