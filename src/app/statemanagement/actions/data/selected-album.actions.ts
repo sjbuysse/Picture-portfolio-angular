@@ -1,7 +1,7 @@
 import {type} from '../util';
 import {Action} from '@ngrx/store';
 import {Album} from 'app/model/album.interface';
-import {Image} from '../../../model/image.interface';
+import {Image} from 'app/model/image.interface';
 
 export const ActionTypes = {
   SET_SELECTED_ALBUM: type<'SET_SELECTED_ALBUM'>('SET_SELECTED_ALBUM'),

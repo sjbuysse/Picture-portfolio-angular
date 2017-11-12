@@ -17,6 +17,7 @@ import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
 })
 export class AlbumDetailsComponent implements OnInit, OnDestroy {
   album$: Observable<Album> = this._selectedAlbumSandbox.selectedAlbum$;
+  albumDetails$ = this._selectedAlbumSandbox.albumDetails$;
   actions = {
     handleClickCard: (image) => this._selectedImageSandbox.setSelectedImage(image)
   };
@@ -33,6 +34,10 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._selectedAlbumSandbox.setSelectedAlbum(null);
     this._selectedImageSandbox.setSelectedImage(null);
+  }
+
+  showImageForm() {
+    this._selectedAlbumSandbox.setImageForm(true);
   }
 
   addImage() {
