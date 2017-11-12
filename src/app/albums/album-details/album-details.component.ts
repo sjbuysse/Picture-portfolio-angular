@@ -4,10 +4,11 @@ import {Image} from 'app/model/image.interface';
 import {SelectedAlbumSandbox} from '../../sandboxes/selected-album.sandbox';
 import {Observable} from 'rxjs/Observable';
 import {SelectedImageSandbox} from '../../sandboxes/selected-image.sandbox';
-import {Subscription} from 'rxjs/Subscription';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/first';
 import {AngularFireAuth} from 'angularfire2/auth';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
 
 @Component({
@@ -23,17 +24,32 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
   };
   selectedImage$: Observable<Image> = this._selectedImageSandbox.selectedImage$;
 
+  formGroup: FormGroup;
+
   constructor(private _selectedAlbumSandbox: SelectedAlbumSandbox,
               private _selectedImageSandbox: SelectedImageSandbox,
-              public  afAuth: AngularFireAuth
+              private _albumsSandbox: AlbumSandbox,
+              private _fb: FormBuilder,
+              public  afAuth: AngularFireAuth,
+              private _route: ActivatedRoute,
               ) { }
 
   ngOnInit() {
+    const id = this._route.snapshot.paramMap.get('id');
+    this._albumsSandbox.getAlbum(id).first().subscribe(album => this._selectedAlbumSandbox.setSelectedAlbum(album));
+    this.buildForm();
   }
 
   ngOnDestroy(): void {
     this._selectedAlbumSandbox.setSelectedAlbum(null);
     this._selectedImageSandbox.setSelectedImage(null);
+  }
+
+  buildForm() {
+    this.formGroup = this._fb.group({
+      name: '',
+      caption: ''
+    });
   }
 
   showImageForm() {
@@ -42,5 +58,10 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
 
   addImage() {
     this._selectedAlbumSandbox.addNewImage();
+  }
+
+  cancelImageAddision() {
+    this._selectedAlbumSandbox.setImageForm(false);
+    this.buildForm();
   }
 }

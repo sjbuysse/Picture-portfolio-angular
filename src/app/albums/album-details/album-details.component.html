@@ -5,10 +5,21 @@
 <div class="album text-muted">
   <div class="container">
     <div *ngIf="afAuth.authState | async">
-      <button class="btn btn-primary" (click)="showImageForm()">Add image</button>
-    </div>
-    <div *ngIf="(albumDetails$ | async)?.showImageForm">
-      show the form
+      <button *ngIf="!(albumDetails$ | async)?.showImageForm" class="btn btn-primary" (click)="showImageForm()">Add image</button>
+      <div *ngIf="(albumDetails$ | async)?.showImageForm">
+        <form [formGroup]="formGroup">
+          <div class="form-group mt-4">
+            <input type="text" class="form-control" id="name" [class.has-value]="formGroup.get('name').value" [formControl]="formGroup.get('name')">
+            <label for="name" class="floating-label">Name picture</label>
+          </div>
+          <div class="form-group mt-4">
+            <input type="text" class="form-control" id="caption" [class.has-value]="formGroup.get('caption').value" [formControl]="formGroup.get('caption')">
+            <label for="caption" class="floating-label">Caption</label>
+          </div>
+          <button type="submit" class="btn btn-primary" (click)="addImage()">Submit</button>
+          <button type="button" class="btn btn-danger" (click)="cancelImageAddision()">Cancel</button>
+        </form>
+      </div>
     </div>
     <div class="row">
       <app-card class="col-md-6 col-lg-4 pl-0 pr-0 mb-4 p-2" *ngFor="let image of (album$ | async)?.images"
