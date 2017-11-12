@@ -17,11 +17,12 @@
   </div>
 </div>
 <div class="navbar navbar-dark bg-dark">
-  <div class="container d-flex justify-content-between">
-    <h5 class="text-white">{{ (selectedAlbum$| async)?.name }}</h5>
+  <div class="container d-flex justify-content-end">
+    <h5 class="text-white mr-auto">{{ (selectedAlbum$| async)?.name }}</h5>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
             aria-controls="navbarHeader" aria-expanded="true" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <button class="btn btn-secondary ml-3" *ngIf="afAuth.authState | async" (click)="logout()">Log out</button>
   </div>
 </div>

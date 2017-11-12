@@ -1,12 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Album} from 'app/model/album.interface';
 import {Image} from 'app/model/image.interface';
-import {ActivatedRoute} from '@angular/router';
 import {SelectedAlbumSandbox} from '../../sandboxes/selected-album.sandbox';
-import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
-import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
 import {SelectedImageSandbox} from '../../sandboxes/selected-image.sandbox';
+import {Subscription} from 'rxjs/Subscription';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/first';
+import {AngularFireAuth} from 'angularfire2/auth';
+import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
 
 @Component({
   selector: 'app-album-details',
@@ -14,27 +16,26 @@ import {SelectedImageSandbox} from '../../sandboxes/selected-image.sandbox';
   styleUrls: ['./album-details.component.scss']
 })
 export class AlbumDetailsComponent implements OnInit, OnDestroy {
-  album: Album;
+  album$: Observable<Album> = this._selectedAlbumSandbox.selectedAlbum$;
   actions = {
     handleClickCard: (image) => this._selectedImageSandbox.setSelectedImage(image)
   };
   selectedImage$: Observable<Image> = this._selectedImageSandbox.selectedImage$;
 
-  constructor(private _route: ActivatedRoute,
-              private _albumSandbox: AlbumSandbox,
-              private _selectedAlbumSandbox: SelectedAlbumSandbox,
-              private _selectedImageSandbox: SelectedImageSandbox) { }
+  constructor(private _selectedAlbumSandbox: SelectedAlbumSandbox,
+              private _selectedImageSandbox: SelectedImageSandbox,
+              public  afAuth: AngularFireAuth
+              ) { }
 
   ngOnInit() {
-    const id = this._route.snapshot.paramMap.get('id');
-    this._albumSandbox.getAlbum(id).subscribe(album => {
-      this.album = album;
-      this._selectedAlbumSandbox.setSelectedAlbum(album);
-    });
   }
 
   ngOnDestroy(): void {
     this._selectedAlbumSandbox.setSelectedAlbum(null);
     this._selectedImageSandbox.setSelectedImage(null);
+  }
+
+  addImage() {
+    this._selectedAlbumSandbox.addNewImage();
   }
 }

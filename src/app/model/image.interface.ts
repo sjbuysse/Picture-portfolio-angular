@@ -4,3 +4,12 @@ export interface Image {
   caption: string;
   url: string;
 }
+
+export function createImage(): Image {
+  return {
+    id: '',
+    name: '',
+    caption: '',
+    url: ''
+  };
+}

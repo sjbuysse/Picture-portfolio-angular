@@ -7,3 +7,11 @@ export interface Album {
   images: Image[];
 }
 
+export function createAlbum(): Album {
+  return {
+    id: '',
+    name: '',
+    caption: '',
+    images: null
+  };
+}

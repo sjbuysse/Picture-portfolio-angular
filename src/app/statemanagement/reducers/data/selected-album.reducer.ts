@@ -6,9 +6,15 @@ export const selectedAlbumReducer: ActionReducer<Album> = (
     state: Album, action: selectedAlbumActions.Actions) => {
     switch (action.type) {
         case selectedAlbumActions.ActionTypes.SET_SELECTED_ALBUM:
-        return action.payload.album;
+          return action.payload.album;
 
-        default:
+        case selectedAlbumActions.ActionTypes.ADD_IMAGE:
+          return Object.assign({}, state, {images: [...state.images, action.payload.image]});
+
+      case selectedAlbumActions.ActionTypes.UPDATE_ALBUM:
+        return Object.assign({}, state, action.payload.album, { id: state.id || action.payload.album.id });
+
+      default:
         return state;
     }
 }

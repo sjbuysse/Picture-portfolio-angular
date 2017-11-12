@@ -1,11 +1,14 @@
 <section class="jumbotron text-center">
-  <h1 class="jumbotron-heading">{{album.name}}</h1>
-  <p class="text-muted lead">{{album.caption}}</p>
+  <h1 class="jumbotron-heading">{{(album$ | async)?.name}}</h1>
+  <p class="text-muted lead">{{(album$ | async)?.caption}}</p>
 </section>
 <div class="album text-muted">
   <div class="container">
+    <div *ngIf="afAuth.authState | async">
+      <button class="btn btn-primary" (click)="addImage()">Add image</button>
+    </div>
     <div class="row">
-      <app-card class="col-md-6 col-lg-4 pl-0 pr-0 mb-4 p-2" *ngFor="let image of album.images"
+      <app-card class="col-md-6 col-lg-4 pl-0 pr-0 mb-4 p-2" *ngFor="let image of (album$ | async)?.images"
                 [cardObject]="image"
                 [actions]="actions"
                 data-toggle="modal" data-target="#myModal"

@@ -1,6 +1,7 @@
 import {type} from '../util';
 import {Action} from '@ngrx/store';
 import {Album} from 'app/model/album.interface';
+import {Image} from '../../../model/image.interface';
 
 export const ActionTypes = {
   ADD_ALBUM: type<'DATA_ADD_ALBUM'>('DATA_ADD_ALBUM'),
@@ -24,15 +25,6 @@ export class RemoveAlbum implements Action {
   }
 }
 
-export class UpdateAlbum implements Action {
-  type = ActionTypes.UPDATE_ALBUM;
-  payload: Readonly<{id: string, album: Album}>;
-  constructor(id: string, album: Album) {
-    this.payload = {id, album};
-  }
-}
-
 export type Actions =
   AddAlbum
-  | RemoveAlbum
-  | UpdateAlbum;
+  | RemoveAlbum;
