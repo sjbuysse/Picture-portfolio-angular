@@ -23,6 +23,8 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
 import { LoginComponent } from './login/login.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SelectedImageSandbox} from './sandboxes/selected-image.sandbox';
+import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular-4.x';
+import { Cloudinary } from '../../node_modules/cloudinary-core';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,8 @@ import {SelectedImageSandbox} from './sandboxes/selected-image.sandbox';
       {path: '', redirectTo: 'albums', pathMatch: 'full'},
     ]),
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    CloudinaryModule.forRoot({Cloudinary}, { cloud_name: 'portfoliomarie' } as CloudinaryConfiguration),
   ],
   providers: [
     AlbumService,

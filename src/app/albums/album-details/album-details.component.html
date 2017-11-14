@@ -3,6 +3,9 @@
   <p class="text-muted lead">{{(album$ | async)?.caption}}</p>
 </section>
 <div class="album text-muted">
+  <cl-image public-id="sample" class="thumbnail inline" angle="20" format="jpg">
+    <cl-transformation height="150" width="150" crop="fill" effect="sepia" radius="20"></cl-transformation>
+  </cl-image>
   <div class="container">
     <div *ngIf="afAuth.authState | async">
       <button *ngIf="!(albumDetails$ | async)?.showImageForm" class="btn btn-primary" (click)="showImageForm()">Add image</button>
