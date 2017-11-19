@@ -1,7 +1,11 @@
 export type AlbumDetailsState = Readonly<{
-  showImageForm: boolean
+  showImageForm: boolean,
+  uploadProgress: number,
+  showProgressbar: boolean,
 }>;
 
 export const initialAlbumDetailsState: AlbumDetailsState = {
-  showImageForm: false
+  showImageForm: false,
+  uploadProgress: 0,
+  showProgressbar: false,
 };

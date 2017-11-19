@@ -1,0 +1,26 @@
+<form [formGroup]="formGroup">
+  <div class="upload_button_holder">
+    <input type="file" #fileInput id="fileElem" accept="image/*" style="display:none" (change)="setFile($event)">
+    <input type="hidden" name="fileHidden" [formControl]="formGroup.get('file')"/> <!-- Validation Field -->
+    <button type="button" class="btn btn-primary" (click)="clickFileElem(event)">Select some files</button>
+  </div>
+  <div class="form-group mt-4">
+    <input type="text" class="form-control" id="name" [class.has-value]="formGroup.get('name').value" [formControl]="formGroup.get('name')">
+    <label for="name" class="floating-label">Name picture</label>
+  </div>
+  <div class="form-group mt-4">
+    <input type="text" class="form-control" id="caption" [class.has-value]="formGroup.get('caption').value" [formControl]="formGroup.get('caption')">
+    <label for="caption" class="floating-label">Caption</label>
+  </div>
+  <button type="submit" class="btn btn-primary"
+          (click)="buttons.submit(selectedFile)"
+          [disabled]="formGroup.invalid">Submit</button>
+  <button type="button" class="btn btn-danger" (click)="buttons.cancel()">Cancel</button>
+  <div class="row" *ngIf="showProgressbar">
+    <div class="col-sm-4">
+      <progressbar class="progress progress-success" [value]="uploadProgress" [max]="100" type="warning">{{uploadProgress}}%</progressbar>
+    </div>
+  </div>
+  <div id="sampleImage"></div>
+</form>
+

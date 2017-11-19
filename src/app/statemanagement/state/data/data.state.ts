@@ -1,5 +1,5 @@
-import { Image } from 'app/model/image.interface';
-import { Album } from 'app/model/album.interface';
+import { createImage, Image } from 'app/model/image.interface';
+import { Album, createAlbum } from 'app/model/album.interface';
 
 export type DataState = Readonly<{
   albums: Album[];
@@ -153,6 +153,6 @@ export const initialDataState = {
       images: []
     },
     ],
-  selectedAlbum: null,
-  selectedImage: null
+  selectedAlbum: createAlbum(),
+  selectedImage: createImage()
 };

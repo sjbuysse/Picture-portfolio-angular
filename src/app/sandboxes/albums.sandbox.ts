@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppState} from '../statemanagement/state/app.state';
 import {Album} from 'app/model/album.interface';
-import * as AlbumActions from 'app/statemanagement/actions/data/albums.actions';
 import {Observable} from 'rxjs/Observable';
+import { Image } from '../model/image.interface';
 
 @Injectable()
 export class AlbumSandbox {

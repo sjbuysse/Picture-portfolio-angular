@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {SelectedAlbumSandbox} from '../../sandboxes/selected-album.sandbox';
+import {SelectedAlbumSandbox} from '../../sandboxes/album-details.sandbox';
 
 @Component({
   selector: 'app-albums',

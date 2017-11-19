@@ -1,15 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Album} from 'app/model/album.interface';
-import {Image} from 'app/model/image.interface';
-import {SelectedAlbumSandbox} from '../../sandboxes/selected-album.sandbox';
+import { createImage, Image } from 'app/model/image.interface';
+import {SelectedAlbumSandbox} from '../../sandboxes/album-details.sandbox';
 import {Observable} from 'rxjs/Observable';
 import {SelectedImageSandbox} from '../../sandboxes/selected-image.sandbox';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/first';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
+import {UploadButtons} from '../../upload/upload.model';
 
 @Component({
   selector: 'app-album-details',
@@ -24,20 +25,33 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
   };
   selectedImage$: Observable<Image> = this._selectedImageSandbox.selectedImage$;
 
-  formGroup: FormGroup;
+  uploadProgress: number;
+  uploadForm: FormGroup;
+  uploadButtons: UploadButtons = {
+    cancel: () => this.cancelImageAddision(),
+    submit: (file: File) => this.onSubmitUpload(file)
+  };
 
   constructor(private _selectedAlbumSandbox: SelectedAlbumSandbox,
               private _selectedImageSandbox: SelectedImageSandbox,
               private _albumsSandbox: AlbumSandbox,
-              private _fb: FormBuilder,
               public  afAuth: AngularFireAuth,
               private _route: ActivatedRoute,
+              private _fb: FormBuilder,
               ) { }
 
   ngOnInit() {
     const id = this._route.snapshot.paramMap.get('id');
     this._albumsSandbox.getAlbum(id).first().subscribe(album => this._selectedAlbumSandbox.setSelectedAlbum(album));
-    this.buildForm();
+    this.uploadForm = this.buildUploadForm();
+  }
+
+  buildUploadForm() {
+    return this._fb.group({
+      name: ['', Validators.required],
+      caption: ['', Validators.required],
+      file: ['', Validators.required]
+    });
   }
 
   ngOnDestroy(): void {
@@ -45,11 +59,10 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
     this._selectedImageSandbox.setSelectedImage(null);
   }
 
-  buildForm() {
-    this.formGroup = this._fb.group({
-      name: '',
-      caption: ''
-    });
+  onSubmitUpload(file: File) {
+    this._selectedAlbumSandbox.setProgressbar(true);
+    const image = this.parseFormValue(this.uploadForm.value);
+    this._selectedAlbumSandbox.uploadImage(file, image);
   }
 
   showImageForm() {
@@ -57,11 +70,16 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
   }
 
   addImage() {
-    this._selectedAlbumSandbox.addNewImage();
+    this._selectedAlbumSandbox.addImage(createImage());
   }
 
   cancelImageAddision() {
     this._selectedAlbumSandbox.setImageForm(false);
-    this.buildForm();
+    this.uploadForm = this.buildUploadForm();
+  }
+
+  private parseFormValue(formValue: any): Image {
+    delete formValue.file;
+    return Object.assign({}, formValue);
   }
 }

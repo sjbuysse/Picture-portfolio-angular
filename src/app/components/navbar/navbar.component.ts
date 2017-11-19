@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Album} from 'app/model/album.interface';
-import {SelectedAlbumSandbox} from '../../sandboxes/selected-album.sandbox';
+import {SelectedAlbumSandbox} from '../../sandboxes/album-details.sandbox';
 import {AngularFireAuth} from 'angularfire2/auth';
 
 @Component({
