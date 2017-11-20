@@ -33,24 +33,14 @@ export class SelectedAlbumSandbox implements OnInit {
 
   uploadImage(file: File, image: Image) {
     this._cloudinaryService.uploadImage(file).subscribe(event => {
-      // Via this API, you get access to the raw event stream.
-      // Look for upload progress events.
       if (event.type === HttpEventType.UploadProgress) {
         // This is an upload progress event. Compute and show the % done:
         const progress = Math.round(100 * event.loaded / event.total);
         this.updateUploadProgress(progress);
       } else if (event instanceof HttpResponse) {
-        this.setProgressbar(false);
-        this.setImageForm(false);
-        // set url on image object
         image.url = event.body.secure_url;
-        // upload to firebase
-        this._firebaseService.addImage(image)
-          .then(response => {
-            image.id = response.id;
-            return this._firebaseService.updateImage(image);
-            }
-          ).then(() => this.addImage(image));
+        this.uploadImageDataToFirebase(image);
+        this.resetAndHideProgressbar();
       }
     });
   }
@@ -64,6 +54,19 @@ export class SelectedAlbumSandbox implements OnInit {
     this._store.dispatch(new albumDetailsActions.SetProgressBar(show));
   }
 
+  private uploadImageDataToFirebase(image: Image): Promise<void> {
+    return this._firebaseService.addImage(image)
+      .then(response => {
+          image.id = response.id;
+          return this._firebaseService.updateImage(image);
+        }
+      ).then(() => this.addImage(image));
+  }
+
+  private resetAndHideProgressbar() {
+    this.setProgressbar(false);
+    this.setImageForm(false);
+  }
   private updateUploadProgress(progress: number) {
     this._store.dispatch(new albumDetailsActions.SetUploadProgress(progress));
   }

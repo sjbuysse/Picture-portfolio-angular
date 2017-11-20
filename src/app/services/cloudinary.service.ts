@@ -20,6 +20,7 @@ export class CloudinaryService {
       reportProgress: true,
     });
 
+    // Via this API, you get access to the raw event stream, and track the progress.
     return this._http.request(req);
   }
 
