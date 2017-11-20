@@ -4,24 +4,40 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
 import DocumentReference = firebase.firestore.DocumentReference;
+import { Album } from '../model/album.interface';
 
 @Injectable()
 export class FirebaseService  {
 
+  albumsCollection: AngularFirestoreCollection<Album>;
+  albums: Observable<Album[]>;
   imagesCollection: AngularFirestoreCollection<Image>;
   images: Observable<Image[]>;
 
   constructor(private _afs: AngularFirestore) {
-    this.imagesCollection = this._afs.collection('images'); // reference
-    this.images = this.imagesCollection.valueChanges(); // observable of images data
+    this.albumsCollection = this._afs.collection('albums'); // reference
+    this.albums = this.albumsCollection.valueChanges(); // observable of albums data
   }
 
-  addImage(image: Image): Promise<DocumentReference> {
-    return this.imagesCollection.add(image);
+  addImage(image: Image, album: Album): Promise<DocumentReference> {
+    return this.albumsCollection.doc(album.id).collection('images').add(image);
   }
 
-  updateImage(image: Image): Promise<void> {
-    return this.imagesCollection.doc(image.id).set(image);
+  updateImage(image: Image, album: Album): Promise<void> {
+    return this.albumsCollection.doc(album.id).collection('images').doc(image.id).set(image);
   }
 
+  loadAlbumDetails(albumId: string): Observable<Album> {
+    return this.albumsCollection.doc(albumId).valueChanges()
+      .map(response => response as Album);
+  }
+
+  loadAlbumImages(albumId: string): Observable<Image[]> {
+    return this.albumsCollection.doc(albumId).collection('images').valueChanges()
+      .map(response => response as Image[]);
+  }
+
+  loadAlbums(): Observable<Album[]> {
+    return this.albums;
+  }
 }

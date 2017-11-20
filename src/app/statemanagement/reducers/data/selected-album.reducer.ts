@@ -9,10 +9,10 @@ export const selectedAlbumReducer: ActionReducer<Album> = (
           return action.payload.album;
 
         case selectedAlbumActions.ActionTypes.ADD_IMAGE:
-          return Object.assign({}, state, {images: [...state.images, action.payload.image]});
+          return Object.assign({}, state, {images: state.images.concat(action.payload.image)});
 
-      case selectedAlbumActions.ActionTypes.UPDATE_ALBUM:
-        return Object.assign({}, state, action.payload.album, { id: state.id || action.payload.album.id });
+        case selectedAlbumActions.ActionTypes.UPDATE_ALBUM:
+          return Object.assign({}, state, action.payload.album, { id: state.id || action.payload.album.id });
 
       default:
         return state;

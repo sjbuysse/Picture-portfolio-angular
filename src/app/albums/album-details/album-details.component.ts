@@ -42,7 +42,7 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const id = this._route.snapshot.paramMap.get('id');
-    this._albumsSandbox.getAlbum(id).first().subscribe(album => this._selectedAlbumSandbox.setSelectedAlbum(album));
+    this._selectedAlbumSandbox.loadAlbumDetails(id);
     this.uploadForm = this.buildUploadForm();
   }
 
@@ -55,8 +55,6 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._selectedAlbumSandbox.setSelectedAlbum(null);
-    this._selectedImageSandbox.setSelectedImage(null);
   }
 
   onSubmitUpload(file: File) {

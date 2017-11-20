@@ -4,6 +4,7 @@ export interface Album {
   id: string;
   name: string;
   caption: string;
+  url: string;
   images: Image[];
 }
 
@@ -12,6 +13,7 @@ export function createAlbum(): Album {
     id: '',
     name: '',
     caption: '',
+    url: '',
     images: null
   };
 }

@@ -7,6 +7,7 @@ export const ActionTypes = {
   ADD_ALBUM: type<'DATA_ADD_ALBUM'>('DATA_ADD_ALBUM'),
   REMOVE_ALBUM: type<'DATA_REMOVE_ALBUM'>('DATA_REMOVE_ALBUM'),
   UPDATE_ALBUM: type<'DATA_UPDATE_ALBUM'>('DATA_UPDATE_ALBUM'),
+  ADD_All_ALBUMS: type<'ADD_All_ALBUMS'>('ADD_All_ALBUMS'),
 }
 
 export class AddAlbum implements Action {
@@ -14,6 +15,14 @@ export class AddAlbum implements Action {
   payload: Readonly<{album: Album}>;
   constructor(album: Album) {
     this.payload = {album};
+  }
+}
+
+export class AddAllAlbum implements Action {
+  type = ActionTypes.ADD_All_ALBUMS;
+  payload: Readonly<{albums: Album[]}>;
+  constructor(albums: Album[]) {
+    this.payload = {albums};
   }
 }
 
@@ -27,4 +36,5 @@ export class RemoveAlbum implements Action {
 
 export type Actions =
   AddAlbum
+  | AddAllAlbum
   | RemoveAlbum;

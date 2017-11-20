@@ -12,6 +12,9 @@ export const albumReducer: ActionReducer<Album[]> = (
     case albumActions.ActionTypes.REMOVE_ALBUM:
       return state.filter(album => album.id !== action.payload.id);
 
+    case albumActions.ActionTypes.ADD_All_ALBUMS:
+      return action.payload.albums;
+
     default:
       return state;
   }

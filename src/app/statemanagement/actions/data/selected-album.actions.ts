@@ -7,6 +7,7 @@ export const ActionTypes = {
   SET_SELECTED_ALBUM: type<'SET_SELECTED_ALBUM'>('SET_SELECTED_ALBUM'),
   UPDATE_ALBUM: type<'UPDATE_ALBUM'>('UPDATE_ALBUM'),
   ADD_IMAGE: type<'DATA_ADD_IMAGE'>('DATA_ADD_IMAGE'),
+  ADD_ALL_IMAGES: type<'ADD_ALL_IMAGES'>('ADD_ALL_IMAGES'),
 }
 
 export class SetSelectedAlbum implements Action {

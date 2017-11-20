@@ -15,24 +15,23 @@ export class AlbumsComponent implements OnInit {
   albums: Observable<Album[]>;
   actions = {
     handleClickCard: (album) => {
-      this._selectedAlbumSandbox.setSelectedAlbum(album);
       this._router.navigate([`/albums/${album.id}`]);
     }
   };
 
   constructor(
-    private _albumSandbox: AlbumSandbox,
     private _router: Router,
-    private _selectedAlbumSandbox: SelectedAlbumSandbox,
+    private _albumSandbox: AlbumSandbox,
     public  afAuth: AngularFireAuth
   ) { }
 
   ngOnInit() {
     this.albums = this._albumSandbox.albums$;
+    this._albumSandbox.loadAlbums();
   }
 
   createAlbum() {
-    this._selectedAlbumSandbox.setSelectedAlbum(createAlbum());
+    // this._selectedAlbumSandbox.setSelectedAlbum(createAlbum());
     this._router.navigate([`/albums/new`]);
   }
 }
