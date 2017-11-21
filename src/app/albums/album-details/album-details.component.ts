@@ -9,8 +9,8 @@ import 'rxjs/add/operator/first';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
-import {UploadButtons} from '../../upload/upload.model';
+import {AlbumListSandbox} from '../../sandboxes/album-list.sandbox';
+import { UploadButtons, UploadLabels } from '../../upload/upload.model';
 
 @Component({
   selector: 'app-album-details',
@@ -31,10 +31,15 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
     cancel: () => this.cancelImageAddision(),
     submit: (file: File) => this.onSubmitUpload(file)
   };
+  uploadLabels: UploadLabels = {
+    imageBtnLabel: 'Select an image',
+    nameLabel: 'Name picture',
+    captionLabel: 'Caption'
+  };
 
   constructor(private _selectedAlbumSandbox: SelectedAlbumSandbox,
               private _selectedImageSandbox: SelectedImageSandbox,
-              private _albumsSandbox: AlbumSandbox,
+              private _albumsSandbox: AlbumListSandbox,
               public  afAuth: AngularFireAuth,
               private _route: ActivatedRoute,
               private _fb: FormBuilder,

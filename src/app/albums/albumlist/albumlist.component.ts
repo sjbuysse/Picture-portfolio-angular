@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {Album, createAlbum} from 'app/model/album.interface';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
-import {AlbumSandbox} from '../../sandboxes/albums.sandbox';
+import {AlbumListSandbox} from '../../sandboxes/album-list.sandbox';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {SelectedAlbumSandbox} from '../../sandboxes/album-details.sandbox';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UploadButtons, UploadLabels } from '../../upload/upload.model';
 
 @Component({
   selector: 'app-albums',
@@ -12,7 +13,18 @@ import {SelectedAlbumSandbox} from '../../sandboxes/album-details.sandbox';
   styleUrls: ['./albumlist.component.css']
 })
 export class AlbumsComponent implements OnInit {
+  albumListContainer$ = this._albumListSandbox.albumListContainer$;
   albums: Observable<Album[]>;
+  uploadForm: FormGroup;
+  uploadButtons: UploadButtons = {
+    cancel: () => this.cancelCreationAlbum(),
+    submit: (file: File) => this.onCreateAlbum(file)
+  };
+  uploadLabels: UploadLabels = {
+    imageBtnLabel: 'Select a cover image',
+    nameLabel: 'Name album',
+    captionLabel: 'Caption'
+  };
   actions = {
     handleClickCard: (album) => {
       this._router.navigate([`/albums/${album.id}`]);
@@ -21,17 +33,40 @@ export class AlbumsComponent implements OnInit {
 
   constructor(
     private _router: Router,
-    private _albumSandbox: AlbumSandbox,
+    private _fb: FormBuilder,
+    private _albumListSandbox: AlbumListSandbox,
     public  afAuth: AngularFireAuth
   ) { }
 
   ngOnInit() {
-    this.albums = this._albumSandbox.albums$;
-    this._albumSandbox.loadAlbums();
+    this.albums = this._albumListSandbox.albums$;
+    this._albumListSandbox.loadAlbums();
+    this.uploadForm = this.buildUploadForm();
+  }
+  showAlbumForm() {
+    this._albumListSandbox.setAlbumForm(true);
   }
 
-  createAlbum() {
-    // this._selectedAlbumSandbox.setSelectedAlbum(createAlbum());
-    this._router.navigate([`/albums/new`]);
+  cancelCreationAlbum() {
+    this._albumListSandbox.setAlbumForm(false);
+    this.uploadForm = this.buildUploadForm();
+  }
+
+  onCreateAlbum(file: File) {
+    this._albumListSandbox.setProgressbar(true);
+    const album = this.parseFormValue(this.uploadForm.value);
+    this._albumListSandbox.uploadAlbum(album, file);
+  }
+
+  private buildUploadForm() {
+    return this._fb.group({
+      name: ['', Validators.required],
+      caption: ['', Validators.required],
+      file: ['', Validators.required]
+    });
+  }
+
+  private parseFormValue(formValue: any): Album {
+    return Object.assign({}, formValue);
   }
 }

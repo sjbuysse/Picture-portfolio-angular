@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {UploadButtons} from './upload.model';
+import { UploadLabels, UploadButtons } from './upload.model';
 
 @Component({
   selector: 'app-upload',
@@ -10,6 +10,7 @@ import {UploadButtons} from './upload.model';
 export class UploadComponent implements OnInit {
   @Input() formGroup: FormGroup;
   @Input() buttons: UploadButtons;
+  @Input() formLabels: UploadLabels;
   @Input() uploadProgress: number;
   @Input() showProgressbar: boolean;
 

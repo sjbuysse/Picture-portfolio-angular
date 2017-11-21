@@ -16,7 +16,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CardComponent } from './components/card/card.component';
 import { ModalComponent } from './components/modal/modal.component';
 import {SelectedAlbumSandbox} from './sandboxes/album-details.sandbox';
-import {AlbumSandbox} from './sandboxes/albums.sandbox';
+import {AlbumListSandbox} from './sandboxes/album-list.sandbox';
 import {AngularFireModule} from 'angularfire2';
 import {environment} from '../environments/environment';
 import {AngularFireAuthModule} from 'angularfire2/auth';
@@ -68,7 +68,7 @@ import { FirebaseService } from './services/firebase.service';
   ],
   providers: [
     AlbumService,
-    AlbumSandbox,
+    AlbumListSandbox,
     SelectedAlbumSandbox,
     SelectedImageSandbox,
     CloudinaryService,

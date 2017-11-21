@@ -19,6 +19,14 @@ export class FirebaseService  {
     this.albums = this.albumsCollection.valueChanges(); // observable of albums data
   }
 
+  addAlbum(album: Album): Promise<DocumentReference> {
+    return this.albumsCollection.add(album);
+  }
+
+  updateAlbum(album: Album): Promise<void> {
+    return this.albumsCollection.doc(album.id).set(album);
+  }
+
   addImage(image: Image, album: Album): Promise<DocumentReference> {
     return this.albumsCollection.doc(album.id).collection('images').add(image);
   }

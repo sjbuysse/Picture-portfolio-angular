@@ -5,7 +5,10 @@
 <div class="album text-muted">
   <div class="container">
     <div *ngIf="afAuth.authState | async">
-      <button class="btn btn-primary" (click)="createAlbum()">Create new album</button>
+      <button *ngIf="!(albumListContainer$ | async)?.showAlbumForm" class="btn btn-primary" (click)="showAlbumForm()">Create Album</button>
+      <div *ngIf="(albumListContainer$ | async)?.showAlbumForm">
+        <app-upload [formLabels]="uploadLabels" [showProgressbar]="(albumListContainer$ | async)?.showProgressbar" [uploadProgress]="(albumListContainer$ | async)?.uploadProgress" [formGroup]="uploadForm" [buttons]="uploadButtons"></app-upload>
+      </div>
     </div>
     <div class="row">
       <app-card class="col-md-6 col-lg-4 pl-0 pr-0 mb-4 p-2" *ngFor="let album of albums | async"

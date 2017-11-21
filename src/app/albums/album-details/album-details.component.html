@@ -7,7 +7,7 @@
     <div *ngIf="afAuth.authState | async">
       <button *ngIf="!(albumDetails$ | async)?.showImageForm" class="btn btn-primary" (click)="showImageForm()">Add image</button>
       <div *ngIf="(albumDetails$ | async)?.showImageForm">
-        <app-upload [showProgressbar]="(albumDetails$ | async)?.showProgressbar" [uploadProgress]="(albumDetails$ | async)?.uploadProgress" [formGroup]="uploadForm" [buttons]="uploadButtons"></app-upload>
+        <app-upload [formLabels]="uploadLabels" [showProgressbar]="(albumDetails$ | async)?.showProgressbar" [uploadProgress]="(albumDetails$ | async)?.uploadProgress" [formGroup]="uploadForm" [buttons]="uploadButtons"></app-upload>
       </div>
     </div>
     <div class="row">
