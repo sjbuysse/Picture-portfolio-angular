@@ -1,7 +1,22 @@
-<div class="card" (click)="actions.handleClickCard(cardObject)">
-  <img class="card-img-top" [src]="cardObject.url" alt="Card image cap">
+<div class="card">
+  <img class="card-img-top" [src]="cardObject.url" alt="Card image cap" (click)="actions.handleClickCard(cardObject)">
   <div class="card-body">
-    <p class="card-text lead">{{cardObject.name}}</p>
-    <p class="card-text">{{cardObject.caption}}</p>
+    <form [formGroup]="formGroup">
+      <div class="form-group mt-4">
+        <input type="text" *ngIf="editing" class="form-control" id="name" [class.has-value]="formGroup.get('name').value" [formControl]="formGroup.get('name')">
+        <label for="name" *ngIf="editing" class="floating-label">{{formLabels.nameLabel}}</label>
+        <label class="lead" *ngIf="!editing">{{cardObject.name}}</label>
+      </div>
+      <div class="form-group mt-4">
+        <input type="text" *ngIf="editing" class="form-control" id="caption" [class.has-value]="formGroup.get('caption').value"
+               [formControl]="formGroup.get('caption')">
+        <label for="caption" *ngIf="editing" class="floating-label">{{formLabels.captionLabel}}</label>
+        <label class="lead" *ngIf="!editing">{{cardObject.caption}}</label>
+      </div>
+      <button type="button" class="btn btn-warning" (click)="setEditing(true)" *ngIf="!editing">Edit</button>
+      <button type="button" class="btn btn-danger" *ngIf="!editing">Delete</button>
+      <button type="button"  *ngIf="editing" class="btn btn-primary" (click)="actions.submit(cardObject, formGroup); setEditing(true)">Save</button>
+      <button type="button" *ngIf="editing"  class="btn btn-danger" (click)="setEditing(false)">Cancel</button>
+    </form>
   </div>
 </div>

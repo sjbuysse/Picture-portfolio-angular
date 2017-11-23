@@ -49,6 +49,11 @@ export class SelectedAlbumSandbox implements OnInit {
         e => console.log(e));
   }
 
+  updateImage(oldImage: Image, newImage: Image, album: Album) {
+    const image = Object.assign({}, oldImage, newImage);
+    this._firebaseService.updateImage(image, album);
+    this._store.dispatch(new selectedAlbumActions.UpdateImage(image, album));
+  }
 
   addImage(image: Image) {
     this._store.dispatch(new selectedAlbumActions.AddImage(image));

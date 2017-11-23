@@ -15,6 +15,16 @@ export const albumReducer: ActionReducer<Album[]> = (
     case albumActions.ActionTypes.ADD_All_ALBUMS:
       return action.payload.albums;
 
+    case albumActions.ActionTypes.UPDATE_ALBUM:
+      return state.map((item) => {
+          if ( item.id !== action.payload.album.id ) {
+            return item;
+          } else {
+            return action.payload.album;
+          }
+        })
+;
+
     default:
       return state;
   }

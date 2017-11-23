@@ -25,6 +25,17 @@ export class AlbumListSandbox {
     this._store.dispatch(new albumActions.AddAlbum(album));
   }
 
+  updateAlbum(oldAlbum: Album, newAlbum: Album, file?: File) {
+    if (!!file) {
+     // uploadFileToCloudinary
+     // upload to firebase
+     // do progresbar stuff
+    }
+    const album = Object.assign({}, oldAlbum, newAlbum);
+    this._firebaseService.updateAlbum(album);
+    this._store.dispatch(new albumActions.UpdateAlbum(album));
+  }
+
   loadAlbums() {
     this._firebaseService.loadAlbums().first().subscribe(albums =>
       this._store.dispatch(new albumActions.AddAllAlbum(albums)));
@@ -37,6 +48,7 @@ export class AlbumListSandbox {
   setAlbumForm(showForm: boolean) {
     this._store.dispatch(new albumListActions.SetAlbumForm(showForm));
   }
+
 
   uploadAlbum(album: Album, file: File) {
     // TODO: should I unsubscribe here?

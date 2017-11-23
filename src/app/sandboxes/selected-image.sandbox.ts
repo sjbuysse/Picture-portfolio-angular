@@ -5,7 +5,7 @@ import * as selectedImageActions from '../statemanagement/actions/data/selected-
 import { Image } from 'app/model/image.interface';
 
 @Injectable()
-export class SelectedImageSandbox implements OnInit{
+export class SelectedImageSandbox implements OnInit {
   selectedImage$ = this.store.select(state => state.data.selectedImage);
 
   constructor(

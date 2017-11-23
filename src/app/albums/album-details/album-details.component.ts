@@ -21,7 +21,9 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
   album$: Observable<Album> = this._selectedAlbumSandbox.selectedAlbum$;
   albumDetails$ = this._selectedAlbumSandbox.albumDetails$;
   actions = {
-    handleClickCard: (image) => this._selectedImageSandbox.setSelectedImage(image)
+    handleClickCard: (image: Image) => this._selectedImageSandbox.setSelectedImage(image),
+    submit: (image: Image, formGroup: FormGroup) => this.updateImage(image, formGroup),
+    delete: (image: Image) => {}
   };
   selectedImage$: Observable<Image> = this._selectedImageSandbox.selectedImage$;
 
@@ -68,12 +70,15 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
     this._selectedAlbumSandbox.uploadImage(file, image);
   }
 
-  showImageForm() {
-    this._selectedAlbumSandbox.setImageForm(true);
+  updateImage(oldImage: Image, formGroup: FormGroup) {
+    const newImage: Image = this.parseFormValue(formGroup.value);
+    this.album$.first().subscribe(album =>
+      this._selectedAlbumSandbox.updateImage(oldImage, newImage,  album)
+    );
   }
 
-  addImage() {
-    this._selectedAlbumSandbox.addImage(createImage());
+  showImageForm() {
+    this._selectedAlbumSandbox.setImageForm(true);
   }
 
   cancelImageAddision() {

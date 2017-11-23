@@ -11,8 +11,17 @@ export const selectedAlbumReducer: ActionReducer<Album> = (
         case selectedAlbumActions.ActionTypes.ADD_IMAGE:
           return Object.assign({}, state, {images: state.images.concat(action.payload.image)});
 
-        case selectedAlbumActions.ActionTypes.UPDATE_ALBUM:
-          return Object.assign({}, state, action.payload.album, { id: state.id || action.payload.album.id });
+      case selectedAlbumActions.ActionTypes.UPDATE_IMAGE:
+        return {
+          ...state,
+          images: state.images.map((item) => {
+            if ( item.id !== action.payload.image.id ) {
+              return item;
+            } else {
+              return action.payload.image;
+            }
+          })
+        };
 
       default:
         return state;

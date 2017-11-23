@@ -16,6 +16,11 @@ export class AlbumsComponent implements OnInit {
   albumListContainer$ = this._albumListSandbox.albumListContainer$;
   albums: Observable<Album[]>;
   uploadForm: FormGroup;
+  actions = {
+    handleClickCard: (album: Album) => this._router.navigate([`/albums/${album.id}`]),
+    submit: (album: Album, formGroup: FormGroup) => this.updateAlbum(album, formGroup),
+    delete: (album: Album) => {}
+  };
   uploadButtons: UploadButtons = {
     cancel: () => this.cancelCreationAlbum(),
     submit: (file: File) => this.onCreateAlbum(file)
@@ -24,11 +29,6 @@ export class AlbumsComponent implements OnInit {
     imageBtnLabel: 'Select a cover image',
     nameLabel: 'Name album',
     captionLabel: 'Caption'
-  };
-  actions = {
-    handleClickCard: (album) => {
-      this._router.navigate([`/albums/${album.id}`]);
-    }
   };
 
   constructor(
@@ -45,6 +45,11 @@ export class AlbumsComponent implements OnInit {
   }
   showAlbumForm() {
     this._albumListSandbox.setAlbumForm(true);
+  }
+
+  updateAlbum(oldAlbum: Album, formGroup: FormGroup, file?: File) {
+    const newAlbum: Album = this.parseFormValue(formGroup.value);
+    this._albumListSandbox.updateAlbum(oldAlbum, newAlbum);
   }
 
   cancelCreationAlbum() {
@@ -67,6 +72,7 @@ export class AlbumsComponent implements OnInit {
   }
 
   private parseFormValue(formValue: any): Album {
+    delete formValue.file;
     return Object.assign({}, formValue);
   }
 }
