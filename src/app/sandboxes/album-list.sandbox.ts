@@ -26,14 +26,25 @@ export class AlbumListSandbox {
   }
 
   updateAlbum(oldAlbum: Album, newAlbum: Album, file?: File) {
-    if (!!file) {
-     // uploadFileToCloudinary
-     // upload to firebase
-     // do progresbar stuff
-    }
     const album = Object.assign({}, oldAlbum, newAlbum);
-    this._firebaseService.updateAlbum(album);
-    this._store.dispatch(new albumActions.UpdateAlbum(album));
+    if (!!file) {
+      this._cloudinaryService.uploadImage(file)
+        .subscribe(event => {
+            if (event.type === HttpEventType.UploadProgress) {
+              // This is an upload progress event. Compute and show the % done:
+              const progress = Math.round(100 * event.loaded / event.total);
+              console.log(progress);
+            } else if (event instanceof HttpResponse) {
+              album.url = event.body.secure_url;
+              this._firebaseService.updateAlbum(album);
+              this._store.dispatch(new albumActions.UpdateAlbum(album));
+            }
+          },
+          e => console.log(e));
+    } else {
+      this._firebaseService.updateAlbum(album);
+      this._store.dispatch(new albumActions.UpdateAlbum(album));
+    }
   }
 
   loadAlbums() {

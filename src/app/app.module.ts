@@ -29,8 +29,11 @@ import { UploadComponent } from './upload/upload.component';
 import {CloudinaryService} from './services/cloudinary.service';
 import { ProgressbarModule, TooltipModule } from 'ngx-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { AngularFirestoreModule } from "angularfire2/firestore";
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { FirebaseService } from './services/firebase.service';
+import { EffectsModule } from '@ngrx/effects';
+import { AlbumListEffects } from './statemanagement/effects/album-list.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 
 @NgModule({
@@ -54,12 +57,14 @@ import { FirebaseService } from './services/firebase.service';
     StoreModule.forRoot(rootReducer, {
       initialState: initialAppState
     }),
+    EffectsModule.forRoot([ AlbumListEffects ]),
     RouterModule.forRoot([
       {path: 'admin', component: LoginComponent},
       {path: 'albums', component: AlbumsComponent},
       {path: 'albums/:id', component: AlbumDetailsComponent},
       {path: '', redirectTo: 'albums', pathMatch: 'full'},
     ]),
+    StoreDevtoolsModule.instrument({ maxAge: 5 }),
     ProgressbarModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

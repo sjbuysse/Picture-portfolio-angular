@@ -2,7 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Album} from 'app/model/album.interface';
 import {Image} from 'app/model/image.interface';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UploadLabels } from '../../upload/upload.model';
+import { UploadButtons, UploadLabels } from '../../upload/upload.model';
+import { CardActions } from "app/components/card/card.model";
 
 @Component({
   selector: 'app-card',
@@ -11,12 +12,9 @@ import { UploadLabels } from '../../upload/upload.model';
 })
 export class CardComponent implements OnInit {
   @Input() cardObject: Album | Image;
-  @Input() actions: {
-    handleClickCard: (cardObject) => void;
-    submit: (cardObject, formGroup: FormGroup) => void;
-    delete: (cardObject) => void;
-  };
-  @Input() formLabels: UploadLabels;
+  @Input() actions: CardActions;
+  @Input() uploadButtons: UploadButtons;
+  @Input() uploadLabels: UploadLabels;
 
   formGroup: FormGroup;
   editing = false;

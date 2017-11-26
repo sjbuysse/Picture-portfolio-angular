@@ -12,8 +12,8 @@
     <input type="text" class="form-control" id="caption" [class.has-value]="formGroup.get('caption').value" [formControl]="formGroup.get('caption')">
     <label for="caption" class="floating-label">{{formLabels.captionLabel}}</label>
   </div>
-  <button type="submit" class="btn btn-primary"
-          (click)="buttons.submit(selectedFile)"
+  <button type="button" class="btn btn-primary"
+          (click)="buttons.submit(formGroup, selectedFile)"
           [disabled]="formGroup.invalid">Submit</button>
   <button type="button" class="btn btn-danger" (click)="buttons.cancel()">Cancel</button>
   <div class="row" *ngIf="showProgressbar">

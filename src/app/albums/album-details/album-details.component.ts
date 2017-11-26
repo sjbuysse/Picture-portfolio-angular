@@ -31,7 +31,7 @@ export class AlbumDetailsComponent implements OnInit, OnDestroy {
   uploadForm: FormGroup;
   uploadButtons: UploadButtons = {
     cancel: () => this.cancelImageAddision(),
-    submit: (file: File) => this.onSubmitUpload(file)
+    submit: (formGroup: FormGroup, file: File) => this.onSubmitUpload(file)
   };
   uploadLabels: UploadLabels = {
     imageBtnLabel: 'Select an image',

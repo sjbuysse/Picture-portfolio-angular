@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {Album, createAlbum} from 'app/model/album.interface';
+import { Album, createAlbum } from 'app/model/album.interface';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
-import {AlbumListSandbox} from '../../sandboxes/album-list.sandbox';
-import {AngularFireAuth} from 'angularfire2/auth';
+import { AlbumListSandbox } from '../../sandboxes/album-list.sandbox';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UploadButtons, UploadLabels } from '../../upload/upload.model';
+import { CardActions, Card } from '../../components/card/card.model';
+import 'rxjs/add/operator/do';
 
 @Component({
   selector: 'app-albums',
@@ -14,16 +16,16 @@ import { UploadButtons, UploadLabels } from '../../upload/upload.model';
 })
 export class AlbumsComponent implements OnInit {
   albumListContainer$ = this._albumListSandbox.albumListContainer$;
-  albums: Observable<Album[]>;
+  albums: Observable<Album[]> = this._albumListSandbox.albums$;
   uploadForm: FormGroup;
-  actions = {
+  actions: CardActions = {
     handleClickCard: (album: Album) => this._router.navigate([`/albums/${album.id}`]),
-    submit: (album: Album, formGroup: FormGroup) => this.updateAlbum(album, formGroup),
-    delete: (album: Album) => {}
+    delete: (album: Album) => {
+    }
   };
   uploadButtons: UploadButtons = {
     cancel: () => this.cancelCreationAlbum(),
-    submit: (file: File) => this.onCreateAlbum(file)
+    submit: (formGroup: FormGroup, file: File) => this.onCreateAlbum(formGroup, file)
   };
   uploadLabels: UploadLabels = {
     imageBtnLabel: 'Select a cover image',
@@ -31,25 +33,29 @@ export class AlbumsComponent implements OnInit {
     captionLabel: 'Caption'
   };
 
-  constructor(
-    private _router: Router,
-    private _fb: FormBuilder,
-    private _albumListSandbox: AlbumListSandbox,
-    public  afAuth: AngularFireAuth
-  ) { }
+
+  // create the cardObjects
+  albumCards$: Observable<Card[]> = this.albums.map(albums =>
+    albums.map(album => this.createAlbumSummary(album)));
+
+  constructor(private _router: Router,
+              private _fb: FormBuilder,
+              private _albumListSandbox: AlbumListSandbox,
+              public  afAuth: AngularFireAuth) {
+  }
 
   ngOnInit() {
-    this.albums = this._albumListSandbox.albums$;
     this._albumListSandbox.loadAlbums();
     this.uploadForm = this.buildUploadForm();
   }
+
   showAlbumForm() {
     this._albumListSandbox.setAlbumForm(true);
   }
 
-  updateAlbum(oldAlbum: Album, formGroup: FormGroup, file?: File) {
+  updateAlbum(oldAlbum: Album, formGroup: FormGroup, file: File) {
     const newAlbum: Album = this.parseFormValue(formGroup.value);
-    this._albumListSandbox.updateAlbum(oldAlbum, newAlbum);
+    this._albumListSandbox.updateAlbum(oldAlbum, newAlbum, file);
   }
 
   cancelCreationAlbum() {
@@ -57,10 +63,38 @@ export class AlbumsComponent implements OnInit {
     this.uploadForm = this.buildUploadForm();
   }
 
-  onCreateAlbum(file: File) {
+  onCreateAlbum(formGroup: FormGroup, file: File) {
     this._albumListSandbox.setProgressbar(true);
     const album = this.parseFormValue(this.uploadForm.value);
     this._albumListSandbox.uploadAlbum(album, file);
+  }
+
+  private createAlbumSummary(album: Album): Card {
+    return Object.assign({}, {
+      cardObject: album,
+      uploadButtons: this.createSummaryUploadButtons(album),
+      uploadLabels: this.createSummaryUploadLabels(),
+      actions: this.createSummaryActions()
+    });
+  }
+
+  private createSummaryUploadButtons(album: Album): UploadButtons {
+    return {
+      cancel: () => {},
+      submit: (formGroup: FormGroup, file: File = null) => this.updateAlbum(album, formGroup, file)
+    };
+  }
+
+  private createSummaryActions(): CardActions {
+    return {
+      handleClickCard: (album: Album) => this._router.navigate([`/albums/${album.id}`]),
+      delete: (deletedAlbum: Album) => {
+      }
+    };
+  }
+
+  private createSummaryUploadLabels(): UploadLabels {
+    return this.uploadLabels;
   }
 
   private buildUploadForm() {
