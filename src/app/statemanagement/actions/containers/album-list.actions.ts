@@ -1,6 +1,7 @@
 import {type} from '../util';
 import {Action} from '@ngrx/store';
 import { CardState } from '../../state/containers/album-list.state';
+import { Album } from '../../../model/album.interface';
 
 export const ActionTypes = {
   SET_ALBUM_FORM: type<'CONTAINERS_ALBUM_LIST_SET_ALBUM_FORM'>('CONTAINERS_ALBUM_LIST_SET_ALBUM_FORM'),
@@ -12,9 +13,9 @@ export const ActionTypes = {
 
 export class SetAlbumForm implements Action {
   type = ActionTypes.SET_ALBUM_FORM;
-  payload: Readonly<{showAlbumForm: boolean}>;
-  constructor(showAlbumForm: boolean) {
-    this.payload = {showAlbumForm};
+  payload: Readonly<{album: Album, showAlbumForm: boolean}>;
+  constructor(album: Album, showAlbumForm: boolean) {
+    this.payload = {album, showAlbumForm};
   }
 }
 
@@ -27,24 +28,24 @@ export class SetUploadProgress implements Action {
 }
 export class SetProgressBar implements Action {
   type = ActionTypes.SET_PROGRESS_BAR;
-  payload: Readonly<{showProgressbar: boolean}>;
-  constructor(showProgressbar: boolean) {
-    this.payload = {showProgressbar};
+  payload: Readonly<{album: Album, showProgressbar: boolean}>;
+  constructor(album: Album, showProgressbar: boolean) {
+    this.payload = {album, showProgressbar};
   }
 }
 
 export class AddCardState implements Action {
   type = ActionTypes.ADD_CARD_STATE;
-  payload: Readonly<{cardState: CardState}>;
-  constructor(cardState: CardState) {
-    this.payload = {cardState};
+  payload: Readonly<{album: Album, cardState: CardState}>;
+  constructor(album: Album, cardState: CardState) {
+    this.payload = {album, cardState};
   }
 }
 
 export class SetAllCardStates implements Action {
   type = ActionTypes.SET_ALL_CARD_STATES;
-  payload: Readonly<{cardStates: CardState[]}>;
-  constructor(cardStates: CardState[]) {
+  payload: Readonly<{cardStates: WeakMap<Album, CardState>}>;
+  constructor(cardStates: WeakMap<Album, CardState>) {
     this.payload = {cardStates};
   }
 }

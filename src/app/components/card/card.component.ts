@@ -4,6 +4,7 @@ import {Image} from 'app/model/image.interface';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadButtons, UploadLabels } from '../../upload/upload.model';
 import { CardActions } from "app/components/card/card.model";
+import { CardState } from '../../statemanagement/state/containers/album-list.state';
 
 @Component({
   selector: 'app-card',

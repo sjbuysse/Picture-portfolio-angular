@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UploadButtons, UploadLabels } from '../../upload/upload.model';
 import { CardActions, Card } from '../../components/card/card.model';
 import 'rxjs/add/operator/do';
+import { CardState } from '../../statemanagement/state/containers/album-list.state';
 
 @Component({
   selector: 'app-albums',
@@ -20,8 +21,8 @@ export class AlbumsComponent implements OnInit {
   uploadForm: FormGroup;
   actions: CardActions = {
     handleClickCard: (album: Album) => this._router.navigate([`/albums/${album.id}`]),
-    delete: (album: Album) => {
-    }
+    delete: (album: Album) => {},
+    setEdit: (album: Album) => {}
   };
   uploadButtons: UploadButtons = {
     cancel: () => this.cancelCreationAlbum(),
@@ -37,6 +38,7 @@ export class AlbumsComponent implements OnInit {
   // create the cardObjects
   albumCards$: Observable<Card[]> = this.albums.map(albums =>
     albums.map(album => this.createAlbumSummary(album)));
+  cardStates$: Observable<WeakMap<Album, CardState>> = this.albumListContainer$.select(state => state.cardStates);
 
   constructor(private _router: Router,
               private _fb: FormBuilder,
@@ -50,7 +52,7 @@ export class AlbumsComponent implements OnInit {
   }
 
   showAlbumForm() {
-    this._albumListSandbox.setAlbumForm(true);
+    // this._albumListSandbox.setAlbumForm(true);
   }
 
   updateAlbum(oldAlbum: Album, formGroup: FormGroup, file: File) {
@@ -59,17 +61,18 @@ export class AlbumsComponent implements OnInit {
   }
 
   cancelCreationAlbum() {
-    this._albumListSandbox.setAlbumForm(false);
+    // this._albumListSandbox.setAlbumForm(false);
     this.uploadForm = this.buildUploadForm();
   }
 
   onCreateAlbum(formGroup: FormGroup, file: File) {
-    this._albumListSandbox.setProgressbar(true);
+    // this._albumListSandbox.setProgressbar(album,true);
     const album = this.parseFormValue(this.uploadForm.value);
     this._albumListSandbox.uploadAlbum(album, file);
   }
 
   private createAlbumSummary(album: Album): Card {
+    console.log(album);
     return Object.assign({}, {
       cardObject: album,
       uploadButtons: this.createSummaryUploadButtons(album),
@@ -88,8 +91,8 @@ export class AlbumsComponent implements OnInit {
   private createSummaryActions(): CardActions {
     return {
       handleClickCard: (album: Album) => this._router.navigate([`/albums/${album.id}`]),
-      delete: (deletedAlbum: Album) => {
-      }
+      delete: (deletedAlbum: Album) => {},
+      setEdit: (album: Album) => this._albumListSandbox.setAlbumForm(album, true)
     };
   }
 

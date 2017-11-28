@@ -52,12 +52,12 @@ export class AlbumListSandbox {
       this._store.dispatch(new albumActions.AddAllAlbum(albums)));
   }
 
-  setProgressbar(show: boolean) {
-    this._store.dispatch(new albumListActions.SetProgressBar(show));
+  setProgressbar(album: Album, show: boolean) {
+    this._store.dispatch(new albumListActions.SetProgressBar(album, show));
   }
 
-  setAlbumForm(showForm: boolean) {
-    this._store.dispatch(new albumListActions.SetAlbumForm(showForm));
+  setAlbumForm(album: Album, showForm: boolean) {
+    this._store.dispatch(new albumListActions.SetAlbumForm(album, showForm));
   }
 
 
@@ -72,7 +72,7 @@ export class AlbumListSandbox {
           } else if (event instanceof HttpResponse) {
             album.url = event.body.secure_url;
             this.uploadAlbumDataToFirebase(album);
-            this.resetAndHideProgressbar();
+            this.resetAndHideProgressbar(album);
           }
         },
         e => console.log(e));
@@ -91,8 +91,8 @@ export class AlbumListSandbox {
     this._store.dispatch(new albumListActions.SetUploadProgress(progress));
   }
 
-  private resetAndHideProgressbar() {
-    this.setProgressbar(false);
-    this.setAlbumForm(false);
+  private resetAndHideProgressbar(album: Album) {
+    this.setProgressbar(album, false);
+    this.setAlbumForm(album, false);
   }
 }

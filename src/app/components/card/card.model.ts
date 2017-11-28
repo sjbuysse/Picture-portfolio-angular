@@ -6,6 +6,7 @@ import { Album } from '../../model/album.interface';
 export interface CardActions {
   handleClickCard: (cardObject) => void;
   delete: (cardObject) => void;
+  setEdit: (cardObject) => void;
 }
 
 export interface Card {

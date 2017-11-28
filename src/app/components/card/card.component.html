@@ -5,7 +5,7 @@
     <label class="lead" *ngIf="!editing">{{cardObject.name}}</label>
     <label class="lead" *ngIf="!editing">{{cardObject.caption}}</label>
     <br />
-    <button type="button" class="btn btn-warning" (click)="setEditing(true)" *ngIf="!editing">Edit</button>
+    <button type="button" class="btn btn-warning" (click)="actions.setEdit()" *ngIf="!editing">Edit</button>
     <button type="button" class="btn btn-danger" *ngIf="!editing">Delete</button>
   </div>
 </div>

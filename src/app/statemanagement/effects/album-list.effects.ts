@@ -4,16 +4,19 @@ import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
 import * as actions from '../actions/data/albums.actions';
 import * as albumListActions from '../actions/containers/album-list.actions';
-import { createCardSate } from '../state/containers/album-list.state';
+import { CardState, createCardSate } from '../state/containers/album-list.state';
+import { Card } from '../../components/card/card.model';
+import { Album } from '../../model/album.interface';
 
 @Injectable()
 export class AlbumListEffects {
   @Effect() createAlbumCardState$: Observable<Action> = this.actions$.ofType(actions.ActionTypes.ADD_ALBUM)
-    .map((action: actions.AddAlbum) => new albumListActions.AddCardState(createCardSate(action.payload.album.id)));
+    .map((action: actions.AddAlbum) => new albumListActions.AddCardState(action.payload.album, createCardSate()));
 
   @Effect() SetAllAlbumCardStates$: Observable<Action> = this.actions$.ofType(actions.ActionTypes.ADD_All_ALBUMS)
     .map((action: actions.AddAllAlbum) => {
-      const cardStates = action.payload.albums.map(album => createCardSate(album.id));
+      const cardStates: WeakMap<Album, CardState> = new WeakMap();
+      action.payload.albums.forEach(album => cardStates.set(album, createCardSate()));
       return new albumListActions.SetAllCardStates(cardStates);
     });
 

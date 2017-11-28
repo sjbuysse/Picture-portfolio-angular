@@ -1,27 +1,27 @@
+import { Album } from '../../../model/album.interface';
+
 export type AlbumListState = Readonly<{
   showAlbumForm: boolean,
-  cardStates: CardState[],
+  cardStates: WeakMap<Album, CardState>,
   uploadProgress: number,
   showProgressbar: boolean,
 }>;
 
 export const initialAlbumListState: AlbumListState = {
   showAlbumForm: false,
-  cardStates: [],
+  cardStates: new WeakMap(),
   uploadProgress: 0,
   showProgressbar: false,
 };
 
 export interface CardState {
-  id: string;
   showAlbumForm: boolean;
   uploadProgress: number;
   showProgressbar: boolean;
 }
 
-export function createCardSate(id: string): CardState {
+export function createCardSate(): CardState {
   return {
-    id: id,
     showAlbumForm: false,
     uploadProgress: 0,
     showProgressbar: false,
