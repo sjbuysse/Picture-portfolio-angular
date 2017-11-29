@@ -14,11 +14,11 @@
   </div>
   <button type="button" class="btn btn-primary"
           (click)="buttons.submit(formGroup, selectedFile)"
-          [disabled]="formGroup.invalid">Submit</button>
+          [disabled]="formGroup.invalid || showProgressbar">Submit</button>
   <button type="button" class="btn btn-danger" (click)="buttons.cancel()">Cancel</button>
   <div class="row" *ngIf="showProgressbar">
-    <div class="col-sm-4">
-      <progressbar class="progress progress-success" [value]="uploadProgress" [max]="100" type="warning">{{uploadProgress}}%</progressbar>
+    <div class="col-lg-4" style="min-width: 200px">
+      <progressbar class="progress progress-success my-3" [value]="uploadProgress" [max]="100" type="success">{{uploadProgress}}%</progressbar>
     </div>
   </div>
   <div id="sampleImage"></div>

@@ -8,12 +8,16 @@ import { Album } from '../model/album.interface';
 import { CloudinaryService } from '../services/cloudinary.service';
 import { HttpEventType } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class AlbumListSandbox {
   albumListContainer$ = this._store.select(state => state.containers.albumList);
 
   albums$ = this._store.select(state => state.data.albums);
+
+  newAlbumUploadSubscription: Subscription;
+  albumCardUploadSubscriptions: Map<string, Subscription> = new Map();
 
   constructor(
     private _store: Store<AppState>,
@@ -28,22 +32,24 @@ export class AlbumListSandbox {
   updateAlbum(oldAlbum: Album, newAlbum: Album, file?: File) {
     const album = Object.assign({}, oldAlbum, newAlbum);
     if (!!file) {
-      this._cloudinaryService.uploadImage(file)
+      this.albumCardUploadSubscriptions.set(album.id, this._cloudinaryService.uploadImage(file)
         .subscribe(event => {
             if (event.type === HttpEventType.UploadProgress) {
               // This is an upload progress event. Compute and show the % done:
               const progress = Math.round(100 * event.loaded / event.total);
-              console.log(progress);
+              this.updateUploadProgress(progress, album);
             } else if (event instanceof HttpResponse) {
               album.url = event.body.secure_url;
               this._firebaseService.updateAlbum(album);
               this._store.dispatch(new albumActions.UpdateAlbum(album));
+              this.resetAndHideProgressbar(album);
             }
           },
-          e => console.log(e));
+          e => console.log(e)));
     } else {
       this._firebaseService.updateAlbum(album);
       this._store.dispatch(new albumActions.UpdateAlbum(album));
+      this.resetAndHideProgressbar(album);
     }
   }
 
@@ -52,18 +58,35 @@ export class AlbumListSandbox {
       this._store.dispatch(new albumActions.AddAllAlbum(albums)));
   }
 
-  setProgressbar(album: Album, show: boolean) {
-    this._store.dispatch(new albumListActions.SetProgressBar(album, show));
+  setProgressbar(show: boolean, album: Album = null) {
+    if (!!album) {
+      this._store.dispatch(new albumListActions.SetAlbumCardProgressBar(album, show));
+    } else {
+      this._store.dispatch(new albumListActions.SetAlbumProgressBar(show));
+    }
   }
 
-  setAlbumForm(album: Album, showForm: boolean) {
-    this._store.dispatch(new albumListActions.SetAlbumForm(album, showForm));
+  setAlbumForm(showForm: boolean, album: Album = null) {
+    if (!!album) {
+      this._store.dispatch(new albumListActions.SetAlbumCardForm(album, showForm));
+    } else {
+      this._store.dispatch(new albumListActions.SetAlbumForm(showForm));
+    }
   }
 
+  cancelAlbumUpload(album: Album = null) {
+    if (!!album) {
+      const subscription = this.albumCardUploadSubscriptions.get(album.id);
+      subscription ? subscription.unsubscribe() : {};
+      this.albumCardUploadSubscriptions.delete(album.id);
+    } else {
+      this.newAlbumUploadSubscription ? this.newAlbumUploadSubscription.unsubscribe() : {};
+    }
+  }
 
-  uploadAlbum(album: Album, file: File) {
+  uploadNewAlbum(album: Album, file: File) {
     // TODO: should I unsubscribe here?
-   this._cloudinaryService.uploadImage(file)
+   this.newAlbumUploadSubscription = this._cloudinaryService.uploadImage(file)
       .subscribe(event => {
           if (event.type === HttpEventType.UploadProgress) {
             // This is an upload progress event. Compute and show the % done:
@@ -72,11 +95,26 @@ export class AlbumListSandbox {
           } else if (event instanceof HttpResponse) {
             album.url = event.body.secure_url;
             this.uploadAlbumDataToFirebase(album);
-            this.resetAndHideProgressbar(album);
+            this.resetAndHideProgressbar();
           }
         },
         e => console.log(e));
   }
+
+  deleteAlbum(album: Album) {
+    this._firebaseService.deleteAlbum(album)
+      .then(() => this._store.dispatch(new albumActions.RemoveAlbum(album.id)))
+      .catch(e => console.log(e));
+  }
+
+  updateUploadProgress(progress: number, album: Album = null) {
+    if (!!album) {
+      this._store.dispatch(new albumListActions.SetAlbumCardUploadProgress(album, progress));
+    } else {
+      this._store.dispatch(new albumListActions.SetAlbumUploadProgress(progress));
+    }
+  }
+
 
   private uploadAlbumDataToFirebase(album: Album): Promise<void> {
     return this._firebaseService.addAlbum(album)
@@ -87,12 +125,13 @@ export class AlbumListSandbox {
       ).then(() => this.addAlbum(album));
   }
 
-  private updateUploadProgress(progress: number) {
-    this._store.dispatch(new albumListActions.SetUploadProgress(progress));
-  }
-
-  private resetAndHideProgressbar(album: Album) {
-    this.setProgressbar(album, false);
-    this.setAlbumForm(album, false);
+  private resetAndHideProgressbar(album: Album = null) {
+    if (!!album) {
+      this.setProgressbar(false, album);
+      this.setAlbumForm(false, album);
+    } else {
+      this.setProgressbar(false);
+      this.setAlbumForm(false);
+    }
   }
 }

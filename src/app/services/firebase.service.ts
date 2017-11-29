@@ -27,6 +27,10 @@ export class FirebaseService  {
     return this.albumsCollection.doc(album.id).set(album);
   }
 
+  deleteAlbum(album: Album): Promise<void> {
+    return this.albumsCollection.doc(album.id).delete();
+  }
+
   addImage(image: Image, album: Album): Promise<DocumentReference> {
     return this.albumsCollection.doc(album.id).collection('images').add(image);
   }

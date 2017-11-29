@@ -1,11 +1,13 @@
 <div class="card">
   <img class="card-img-top" [src]="cardObject.url" alt="Card image cap" (click)="actions.handleClickCard(cardObject)">
   <div class="card-body">
-    <app-upload *ngIf="editing" [formLabels]="uploadLabels" [formGroup]="formGroup" [buttons]="uploadButtons"></app-upload>
-    <label class="lead" *ngIf="!editing">{{cardObject.name}}</label>
-    <label class="lead" *ngIf="!editing">{{cardObject.caption}}</label>
+    <app-upload *ngIf="cardState.showAlbumForm" [showProgressbar]="cardState.showProgressbar" [formLabels]="uploadLabels"
+                [formGroup]="formGroup" [buttons]="uploadButtons" [uploadProgress]="cardState.uploadProgress"
+                (cancel)="onCancel()"></app-upload>
+    <label class="lead" *ngIf="!cardState.showAlbumForm">{{cardObject.name}}</label>
+    <label class="lead" *ngIf="!cardState.showAlbumForm">{{cardObject.caption}}</label>
     <br />
-    <button type="button" class="btn btn-warning" (click)="actions.setEdit()" *ngIf="!editing">Edit</button>
-    <button type="button" class="btn btn-danger" *ngIf="!editing">Delete</button>
+    <button type="button" class="btn btn-warning" (click)="actions.setEdit(cardObject)" *ngIf="!cardState.showAlbumForm">Edit</button>
+    <button type="button" class="btn btn-danger" *ngIf="!cardState.showAlbumForm" (click)="actions.delete(cardObject)">Delete</button>
   </div>
 </div>

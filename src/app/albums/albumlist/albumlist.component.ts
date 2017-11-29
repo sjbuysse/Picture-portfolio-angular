@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UploadButtons, UploadLabels } from '../../upload/upload.model';
 import { CardActions, Card } from '../../components/card/card.model';
 import 'rxjs/add/operator/do';
-import { CardState } from '../../statemanagement/state/containers/album-list.state';
+import { CardState, createCardSate } from '../../statemanagement/state/containers/album-list.state';
 
 @Component({
   selector: 'app-albums',
@@ -17,7 +17,7 @@ import { CardState } from '../../statemanagement/state/containers/album-list.sta
 })
 export class AlbumsComponent implements OnInit {
   albumListContainer$ = this._albumListSandbox.albumListContainer$;
-  albums: Observable<Album[]> = this._albumListSandbox.albums$;
+  albums$: Observable<Album[]> = this._albumListSandbox.albums$;
   uploadForm: FormGroup;
   actions: CardActions = {
     handleClickCard: (album: Album) => this._router.navigate([`/albums/${album.id}`]),
@@ -36,9 +36,9 @@ export class AlbumsComponent implements OnInit {
 
 
   // create the cardObjects
-  albumCards$: Observable<Card[]> = this.albums.map(albums =>
-    albums.map(album => this.createAlbumSummary(album)));
-  cardStates$: Observable<WeakMap<Album, CardState>> = this.albumListContainer$.select(state => state.cardStates);
+  cardStates$: Observable<Map<string, CardState>> = this.albumListContainer$.map(albumListState => albumListState.cardStates);
+  albumCards$: Observable<Card[]> = this.albums$.combineLatest(this.cardStates$).map(([albums, cardStates]) =>
+  albums.map(album => this.createAlbumSummary(album, cardStates.get(album.id))));
 
   constructor(private _router: Router,
               private _fb: FormBuilder,
@@ -51,8 +51,8 @@ export class AlbumsComponent implements OnInit {
     this.uploadForm = this.buildUploadForm();
   }
 
-  showAlbumForm() {
-    // this._albumListSandbox.setAlbumForm(true);
+  showCreateAlbumForm() {
+    this._albumListSandbox.setAlbumForm(true);
   }
 
   updateAlbum(oldAlbum: Album, formGroup: FormGroup, file: File) {
@@ -60,21 +60,31 @@ export class AlbumsComponent implements OnInit {
     this._albumListSandbox.updateAlbum(oldAlbum, newAlbum, file);
   }
 
+  cancelUpdateAlbum(album: Album) {
+    this._albumListSandbox.setAlbumForm(false, album);
+    this._albumListSandbox.setProgressbar(false, album);
+    this._albumListSandbox.updateUploadProgress(0, album);
+    this._albumListSandbox.cancelAlbumUpload(album);
+  }
+
   cancelCreationAlbum() {
-    // this._albumListSandbox.setAlbumForm(false);
+    this._albumListSandbox.setAlbumForm(false);
+    this._albumListSandbox.setProgressbar(false);
+    this._albumListSandbox.updateUploadProgress(0);
+    this._albumListSandbox.cancelAlbumUpload();
     this.uploadForm = this.buildUploadForm();
   }
 
   onCreateAlbum(formGroup: FormGroup, file: File) {
-    // this._albumListSandbox.setProgressbar(album,true);
+    this._albumListSandbox.setProgressbar(true);
     const album = this.parseFormValue(this.uploadForm.value);
-    this._albumListSandbox.uploadAlbum(album, file);
+    this._albumListSandbox.uploadNewAlbum(album, file);
   }
 
-  private createAlbumSummary(album: Album): Card {
-    console.log(album);
+  private createAlbumSummary(album: Album, cardState: CardState): Card {
     return Object.assign({}, {
       cardObject: album,
+      cardState: cardState,
       uploadButtons: this.createSummaryUploadButtons(album),
       uploadLabels: this.createSummaryUploadLabels(),
       actions: this.createSummaryActions()
@@ -83,16 +93,21 @@ export class AlbumsComponent implements OnInit {
 
   private createSummaryUploadButtons(album: Album): UploadButtons {
     return {
-      cancel: () => {},
-      submit: (formGroup: FormGroup, file: File = null) => this.updateAlbum(album, formGroup, file)
+      cancel: () => this.cancelUpdateAlbum(album),
+      submit: (formGroup: FormGroup, file: File) => {
+        this.updateAlbum(album, formGroup, file);
+        if (!!file) {
+          this._albumListSandbox.setProgressbar(true, album);
+        }
+      }
     };
   }
 
   private createSummaryActions(): CardActions {
     return {
       handleClickCard: (album: Album) => this._router.navigate([`/albums/${album.id}`]),
-      delete: (deletedAlbum: Album) => {},
-      setEdit: (album: Album) => this._albumListSandbox.setAlbumForm(album, true)
+      delete: (album: Album) => this._albumListSandbox.deleteAlbum(album),
+      setEdit: (album: Album) => this._albumListSandbox.setAlbumForm(true, album)
     };
   }
 

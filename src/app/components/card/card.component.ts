@@ -3,8 +3,8 @@ import {Album} from 'app/model/album.interface';
 import {Image} from 'app/model/image.interface';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadButtons, UploadLabels } from '../../upload/upload.model';
-import { CardActions } from "app/components/card/card.model";
-import { CardState } from '../../statemanagement/state/containers/album-list.state';
+import { CardActions } from 'app/components/card/card.model';
+import { CardState } from 'app/statemanagement/state/containers/album-list.state';
 
 @Component({
   selector: 'app-card',
@@ -16,20 +16,23 @@ export class CardComponent implements OnInit {
   @Input() actions: CardActions;
   @Input() uploadButtons: UploadButtons;
   @Input() uploadLabels: UploadLabels;
+  @Input() cardState: CardState;
 
   formGroup: FormGroup;
-  editing = false;
 
   constructor(private _fb: FormBuilder) { }
 
   ngOnInit() {
     this.buildForm();
-    this.formGroup.valueChanges.subscribe(x => console.log(x));
   }
 
-  setEditing(show: boolean) {
+  onCancel() {
+    this.uploadButtons.cancel();
     this.buildForm();
-    this.editing = show;
+  }
+
+  onSubmit(file: File) {
+    this.uploadButtons.submit(this.formGroup, file);
   }
 
   private buildForm() {

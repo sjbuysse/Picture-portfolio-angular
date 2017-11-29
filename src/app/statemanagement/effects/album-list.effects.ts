@@ -15,8 +15,8 @@ export class AlbumListEffects {
 
   @Effect() SetAllAlbumCardStates$: Observable<Action> = this.actions$.ofType(actions.ActionTypes.ADD_All_ALBUMS)
     .map((action: actions.AddAllAlbum) => {
-      const cardStates: WeakMap<Album, CardState> = new WeakMap();
-      action.payload.albums.forEach(album => cardStates.set(album, createCardSate()));
+      const cardStates: Map<string, CardState> = new Map();
+      action.payload.albums.forEach(album => cardStates.set(album.id, createCardSate()));
       return new albumListActions.SetAllCardStates(cardStates);
     });
 

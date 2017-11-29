@@ -2,14 +2,14 @@ import { Album } from '../../../model/album.interface';
 
 export type AlbumListState = Readonly<{
   showAlbumForm: boolean,
-  cardStates: WeakMap<Album, CardState>,
+  cardStates: Map<string, CardState>,
   uploadProgress: number,
   showProgressbar: boolean,
 }>;
 
 export const initialAlbumListState: AlbumListState = {
   showAlbumForm: false,
-  cardStates: new WeakMap(),
+  cardStates: new Map(),
   uploadProgress: 0,
   showProgressbar: false,
 };

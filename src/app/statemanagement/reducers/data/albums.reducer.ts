@@ -7,7 +7,7 @@ export const albumReducer: ActionReducer<Album[]> = (
 ) => {
   switch (action.type) {
     case albumActions.ActionTypes.ADD_ALBUM:
-      return state.concat(action.payload.album);
+      return [action.payload.album, ...state];
 
     case albumActions.ActionTypes.REMOVE_ALBUM:
       return state.filter(album => album.id !== action.payload.id);
