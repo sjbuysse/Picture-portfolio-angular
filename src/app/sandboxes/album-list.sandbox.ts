@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {AppState} from '../statemanagement/state/app.state';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../statemanagement/state/app.state';
 import { FirebaseService } from '../services/firebase.service';
 import * as albumActions from 'app/statemanagement/actions/data/albums.actions';
 import * as albumListActions from 'app/statemanagement/actions/containers/album-list.actions';
@@ -19,19 +19,21 @@ export class AlbumListSandbox {
   newAlbumUploadSubscription: Subscription;
   albumCardUploadSubscriptions: Map<string, Subscription> = new Map();
 
-  constructor(
-    private _store: Store<AppState>,
-    private _firebaseService: FirebaseService,
-    private _cloudinaryService: CloudinaryService
-  ) { }
+  constructor(private _store: Store<AppState>,
+              private _firebaseService: FirebaseService,
+              private _cloudinaryService: CloudinaryService) {
+  }
 
-  addAlbum(album: Album) {
+  addAlbum(album: Album): Promise<Album> {
     this._store.dispatch(new albumActions.AddAlbum(album));
+    return Promise.resolve(album);
   }
 
   updateAlbum(oldAlbum: Album, newAlbum: Album, file?: File) {
     const album = Object.assign({}, oldAlbum, newAlbum);
     if (!!file) {
+      this.setAlbumForm(true, album);
+      this.setProgressbar(true, album);
       this.albumCardUploadSubscriptions.set(album.id, this._cloudinaryService.uploadImage(file)
         .subscribe(event => {
             if (event.type === HttpEventType.UploadProgress) {
@@ -79,26 +81,20 @@ export class AlbumListSandbox {
       const subscription = this.albumCardUploadSubscriptions.get(album.id);
       subscription ? subscription.unsubscribe() : {};
       this.albumCardUploadSubscriptions.delete(album.id);
+      this.deleteAlbum(album);
     } else {
       this.newAlbumUploadSubscription ? this.newAlbumUploadSubscription.unsubscribe() : {};
     }
   }
 
   uploadNewAlbum(album: Album, file: File) {
-    // TODO: should I unsubscribe here?
-   this.newAlbumUploadSubscription = this._cloudinaryService.uploadImage(file)
-      .subscribe(event => {
-          if (event.type === HttpEventType.UploadProgress) {
-            // This is an upload progress event. Compute and show the % done:
-            const progress = Math.round(100 * event.loaded / event.total);
-            this.updateUploadProgress(progress);
-          } else if (event instanceof HttpResponse) {
-            album.url = event.body.secure_url;
-            this.uploadAlbumDataToFirebase(album);
-            this.resetAndHideProgressbar();
-          }
-        },
-        e => console.log(e));
+    // TODO: set temp image to the one you read in...
+    album.url = 'http://via.placeholder.com/350x150';
+    this.uploadAlbumDataToFirebase(album)
+      .then((albumWithId) => {
+        return this.addAlbum(albumWithId);
+      })
+      .then((albumWithId) => this.updateAlbum(albumWithId, albumWithId, file));
   }
 
   deleteAlbum(album: Album) {
@@ -116,13 +112,14 @@ export class AlbumListSandbox {
   }
 
 
-  private uploadAlbumDataToFirebase(album: Album): Promise<void> {
+  private uploadAlbumDataToFirebase(album: Album): Promise<Album> {
     return this._firebaseService.addAlbum(album)
       .then(response => {
           album.id = response.id;
-          return this._firebaseService.updateAlbum(album);
+          this._firebaseService.updateAlbum(album);
+          return Promise.resolve(album);
         }
-      ).then(() => this.addAlbum(album));
+      );
   }
 
   private resetAndHideProgressbar(album: Album = null) {

@@ -24,6 +24,8 @@ export class CardComponent implements OnInit {
 
   ngOnInit() {
     this.buildForm();
+    if (this.cardState) {
+    }
   }
 
   onCancel() {

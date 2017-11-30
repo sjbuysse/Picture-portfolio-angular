@@ -37,8 +37,8 @@ export class AlbumsComponent implements OnInit {
 
   // create the cardObjects
   cardStates$: Observable<Map<string, CardState>> = this.albumListContainer$.map(albumListState => albumListState.cardStates);
-  albumCards$: Observable<Card[]> = this.albums$.combineLatest(this.cardStates$).map(([albums, cardStates]) =>
-  albums.map(album => this.createAlbumSummary(album, cardStates.get(album.id))));
+  albumCards$: Observable<Card[]> = this.albums$.map((albums) =>
+  albums.map(album => this.createAlbumSummary(album)));
 
   constructor(private _router: Router,
               private _fb: FormBuilder,
@@ -76,15 +76,13 @@ export class AlbumsComponent implements OnInit {
   }
 
   onCreateAlbum(formGroup: FormGroup, file: File) {
-    this._albumListSandbox.setProgressbar(true);
     const album = this.parseFormValue(this.uploadForm.value);
     this._albumListSandbox.uploadNewAlbum(album, file);
   }
 
-  private createAlbumSummary(album: Album, cardState: CardState): Card {
+  private createAlbumSummary(album: Album): Card {
     return Object.assign({}, {
       cardObject: album,
-      cardState: cardState,
       uploadButtons: this.createSummaryUploadButtons(album),
       uploadLabels: this.createSummaryUploadLabels(),
       actions: this.createSummaryActions()
@@ -94,12 +92,7 @@ export class AlbumsComponent implements OnInit {
   private createSummaryUploadButtons(album: Album): UploadButtons {
     return {
       cancel: () => this.cancelUpdateAlbum(album),
-      submit: (formGroup: FormGroup, file: File) => {
-        this.updateAlbum(album, formGroup, file);
-        if (!!file) {
-          this._albumListSandbox.setProgressbar(true, album);
-        }
-      }
+      submit: (formGroup: FormGroup, file: File) => this.updateAlbum(album, formGroup, file)
     };
   }
 
