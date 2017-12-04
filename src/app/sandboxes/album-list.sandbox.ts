@@ -15,6 +15,7 @@ export class AlbumListSandbox {
   albumListContainer$ = this._store.select(state => state.containers.albumList);
 
   albums$ = this._store.select(state => state.data.albums);
+  isUploadingToFirebase$ = this._store.select(state => state.containers.albumList.isUploadingToFirebase);
 
   newAlbumUploadSubscription: Subscription;
   albumCardUploadSubscriptions: Map<string, Subscription> = new Map();
@@ -123,5 +124,9 @@ export class AlbumListSandbox {
           return Promise.resolve(album);
         }
       );
+  }
+
+  setIsUploadingToFirebase(isUploading: boolean) {
+    this._store.dispatch(new albumListActions.SetIsUploading(isUploading));
   }
 }

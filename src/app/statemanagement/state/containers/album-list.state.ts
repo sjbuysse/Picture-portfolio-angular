@@ -2,6 +2,7 @@ import { Album } from '../../../model/album.interface';
 
 export type AlbumListState = Readonly<{
   showAlbumForm: boolean,
+  isUploadingToFirebase: boolean,
   cardStates: Map<string, CardState>,
   uploadProgress: number,
   showProgressbar: boolean,
@@ -9,6 +10,7 @@ export type AlbumListState = Readonly<{
 
 export const initialAlbumListState: AlbumListState = {
   showAlbumForm: false,
+  isUploadingToFirebase: false,
   cardStates: new Map(),
   uploadProgress: 0,
   showProgressbar: false,

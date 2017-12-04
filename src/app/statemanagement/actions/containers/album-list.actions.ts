@@ -6,6 +6,7 @@ import { Album } from '../../../model/album.interface';
 export const ActionTypes = {
   SET_ALBUM_CARD_FORM: type<'CONTAINERS_ALBUM_CARD_SET_ALBUM_FORM'>('CONTAINERS_ALBUM_CARD_SET_ALBUM_FORM'),
   SET_ALBUM_FORM: type<'CONTAINERS_ALBUM_LIST_SET_ALBUM_FORM'>('CONTAINERS_ALBUM_LIST_SET_ALBUM_FORM'),
+  SET_IS_UPLOADING: type<'SET_IS_UPLOADING'>('SET_IS_UPLOADING'),
   SET_ALBUM_CARD_UPLOAD_PROGRESS: type<'CONTAINERS_ALBUM_CARD_SET_ALBUM_UPLOAD_PROGRESS'>('CONTAINERS_ALBUM_CARD_SET_ALBUM_UPLOAD_PROGRESS'),
   SET_ALBUM_UPLOAD_PROGRESS: type<'CONTAINERS_ALBUM_SET_ALBUM_UPLOAD_PROGRESS'>('CONTAINERS_ALBUM_SET_ALBUM_UPLOAD_PROGRESS'),
   SET_ALBUM_CARD_PROGRESS_BAR: type<'CONTAINERS_ALBUM_CARD_SET_ALBUM_PROGRESS_BAR'>('CONTAINERS_ALBUM_CARD_SET_ALBUM_PROGRESS_BAR'),
@@ -21,11 +22,20 @@ export class SetAlbumForm implements Action {
     this.payload = {showAlbumForm};
   }
 }
+
 export class SetAlbumProgressBar implements Action {
   type = ActionTypes.SET_ALBUM_PROGRESS_BAR;
   payload: Readonly<{showProgressbar: boolean}>;
   constructor(showProgressbar: boolean) {
     this.payload = {showProgressbar};
+  }
+}
+
+export class SetIsUploading implements Action {
+  type = ActionTypes.SET_IS_UPLOADING;
+  payload: Readonly<{isUploading: boolean}>;
+  constructor(isUploading: boolean) {
+    this.payload = {isUploading};
   }
 }
 
@@ -79,6 +89,7 @@ export class SetAllCardStates implements Action {
 
 export type Actions =
   SetAlbumCardForm
+  | SetIsUploading
   | AddCardState
   | SetAlbumUploadProgress
   | SetAlbumForm

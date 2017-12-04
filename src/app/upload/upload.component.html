@@ -19,7 +19,7 @@
           (click)="buttons.submit(formGroup, selectedFile)"
           [disabled]="formGroup.invalid || showProgressbar">Submit</button>
   <button type="button" class="btn btn-danger" (click)="buttons.cancel()">Cancel</button>
-  <arz-loader [isBusy]="isUploading"></arz-loader>
+  <app-loader [isBusy]="isUploading" class="ml-2"></app-loader>
   <div class="row" *ngIf="showProgressbar">
     <div class="col-lg-4" style="min-width: 200px">
       <progressbar class="progress progress-success my-3" [value]="uploadProgress" [max]="100" type="success">{{uploadProgress}}%</progressbar>

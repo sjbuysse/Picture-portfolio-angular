@@ -16,7 +16,7 @@ import { CardState, createCardSate } from '../../statemanagement/state/container
   styleUrls: ['./albumlist.component.css']
 })
 export class AlbumsComponent implements OnInit {
-  // TODO: make containerstate voor isuploadingtofirebase$
+  isUploadingToFirebase$ = this._albumListSandbox.isUploadingToFirebase$;
   albumListContainer$ = this._albumListSandbox.albumListContainer$;
   albums$: Observable<Album[]> = this._albumListSandbox.albums$;
   uploadForm: FormGroup;
@@ -80,6 +80,7 @@ export class AlbumsComponent implements OnInit {
     // TODO: set temp image to the one you read in...
     album.url = 'http://via.placeholder.com/350x150';
 
+    this._albumListSandbox.setIsUploadingToFirebase(true);
     this._albumListSandbox.uploadAlbumDataToFirebase(album)
       .then((albumWithId) => {
       this.resetAndHideNewAlbumForm();
@@ -89,6 +90,7 @@ export class AlbumsComponent implements OnInit {
   }
 
   private resetAndHideNewAlbumForm() {
+    this._albumListSandbox.setIsUploadingToFirebase(false);
     this.uploadForm = this.buildUploadForm();
     this._albumListSandbox.resetAndHideAlbumForm();
   }

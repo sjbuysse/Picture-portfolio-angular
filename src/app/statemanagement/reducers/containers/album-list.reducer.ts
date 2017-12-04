@@ -47,6 +47,9 @@ export const albumListReducer: ActionReducer<AlbumListState> = (
     case albumListActions.ActionTypes.SET_ALBUM_FORM:
       return Object.assign(state, {showAlbumForm: action.payload.showAlbumForm});
 
+    case albumListActions.ActionTypes.SET_IS_UPLOADING:
+      return Object.assign(state, {isUploadingToFirebase: action.payload.isUploading});
+
     case albumListActions.ActionTypes.SET_ALBUM_PROGRESS_BAR:
       return Object.assign(state, {showProgressbar: action.payload.showProgressbar});
 

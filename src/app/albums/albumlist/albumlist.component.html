@@ -2,12 +2,18 @@
   <h1 class="jumbotron-heading">Albums</h1>
   <p class="text-muted lead">Here you find a couple of my selections. I love shooting pictures of animals, and nature.</p>
 </section>
-<div class="album text-muted">
+<div class="album bg-light text-muted">
   <div class="container">
     <div *ngIf="afAuth.authState | async">
       <button *ngIf="!(albumListContainer$ | async)?.showAlbumForm" class="btn btn-primary" (click)="showCreateAlbumForm()">Create Album</button>
       <div *ngIf="(albumListContainer$ | async)?.showAlbumForm">
-        <app-upload [formLabels]="uploadLabels" [showProgressbar]="(albumListContainer$ | async)?.showProgressbar" [uploadProgress]="(albumListContainer$ | async)?.uploadProgress" [formGroup]="uploadForm" [buttons]="uploadButtons"></app-upload>
+        <app-upload
+          [formLabels]="uploadLabels"
+          [showProgressbar]="(albumListContainer$ | async)?.showProgressbar"
+          [uploadProgress]="(albumListContainer$ | async)?.uploadProgress"
+          [isUploading]="(isUploadingToFirebase$ | async)"
+          [formGroup]="uploadForm"
+          [buttons]="uploadButtons"></app-upload>
       </div>
     </div>
     <div class="row">
