@@ -4,6 +4,9 @@
     <input type="hidden" name="fileHidden" [formControl]="formGroup.get('file')"/> <!-- Validation Field -->
     <button type="button" class="btn btn-primary" (click)="clickFileElem(event)">{{formLabels.imageBtnLabel}}</button>
   </div>
+  <div class="col-sm-4 mt-3 p-0" style="min-width: 200px">
+    <img *ngIf="previewImage" [src]="previewImage" class="preview-image">
+  </div>
   <div class="form-group mt-4">
     <input type="text" class="form-control" id="name" [class.has-value]="formGroup.get('name').value" [formControl]="formGroup.get('name')">
     <label for="name" class="floating-label">{{formLabels.nameLabel}}</label>
@@ -16,11 +19,11 @@
           (click)="buttons.submit(formGroup, selectedFile)"
           [disabled]="formGroup.invalid || showProgressbar">Submit</button>
   <button type="button" class="btn btn-danger" (click)="buttons.cancel()">Cancel</button>
+  <arz-loader [isBusy]="isUploading"></arz-loader>
   <div class="row" *ngIf="showProgressbar">
     <div class="col-lg-4" style="min-width: 200px">
       <progressbar class="progress progress-success my-3" [value]="uploadProgress" [max]="100" type="success">{{uploadProgress}}%</progressbar>
     </div>
   </div>
-  <div id="sampleImage"></div>
 </form>
 

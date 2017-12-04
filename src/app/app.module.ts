@@ -34,6 +34,7 @@ import { FirebaseService } from './services/firebase.service';
 import { EffectsModule } from '@ngrx/effects';
 import { AlbumListEffects } from './statemanagement/effects/album-list.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { LoaderComponent } from './components/loader/loader.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     ModalComponent,
     LoginComponent,
     UploadComponent,
+    LoaderComponent
   ],
   entryComponents: [
     CardComponent

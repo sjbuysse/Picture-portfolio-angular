@@ -13,10 +13,12 @@ export class UploadComponent implements OnInit {
   @Input() formLabels: UploadLabels;
   @Input() uploadProgress: number;
   @Input() showProgressbar: boolean;
+  @Input() isUploading: boolean;
 
   @Output() cancel: EventEmitter<Event> = new EventEmitter();
 
   selectedFile: File;
+  previewImage: object;
   @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor() { }
@@ -37,6 +39,18 @@ export class UploadComponent implements OnInit {
     event.preventDefault();
     this.selectedFile = event.srcElement.files[0];
     this.formGroup.get('file').setValue(this.selectedFile ? this.selectedFile.name : '');
+    this.readSelectedFile(this.selectedFile).then(result => this.previewImage = result);
+  }
+
+  private readSelectedFile(selectedFile): Promise<object> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        resolve(event.target.result);
+      };
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(selectedFile);
+    });
   }
 
 

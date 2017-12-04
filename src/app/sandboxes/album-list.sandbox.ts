@@ -44,15 +44,19 @@ export class AlbumListSandbox {
               album.url = event.body.secure_url;
               this._firebaseService.updateAlbum(album);
               this._store.dispatch(new albumActions.UpdateAlbum(album));
-              this.resetAndHideProgressbar(album);
+              this.resetAndHideAlbumForm(album);
             }
           },
           e => console.log(e)));
     } else {
       this._firebaseService.updateAlbum(album);
       this._store.dispatch(new albumActions.UpdateAlbum(album));
-      this.resetAndHideProgressbar(album);
+      this.resetAndHideAlbumForm(album);
     }
+  }
+
+  uploadImageToAlbum(album: Album, image: File) {
+    this.updateAlbum(album, album, image);
   }
 
   loadAlbums() {
@@ -87,19 +91,9 @@ export class AlbumListSandbox {
     }
   }
 
-  uploadNewAlbum(album: Album, file: File) {
-    // TODO: set temp image to the one you read in...
-    album.url = 'http://via.placeholder.com/350x150';
-    this.uploadAlbumDataToFirebase(album)
-      .then((albumWithId) => {
-        return this.addAlbum(albumWithId);
-      })
-      .then((albumWithId) => this.updateAlbum(albumWithId, albumWithId, file));
-  }
-
   deleteAlbum(album: Album) {
+    this._store.dispatch(new albumActions.RemoveAlbum(album.id));
     this._firebaseService.deleteAlbum(album)
-      .then(() => this._store.dispatch(new albumActions.RemoveAlbum(album.id)))
       .catch(e => console.log(e));
   }
 
@@ -111,18 +105,7 @@ export class AlbumListSandbox {
     }
   }
 
-
-  private uploadAlbumDataToFirebase(album: Album): Promise<Album> {
-    return this._firebaseService.addAlbum(album)
-      .then(response => {
-          album.id = response.id;
-          this._firebaseService.updateAlbum(album);
-          return Promise.resolve(album);
-        }
-      );
-  }
-
-  private resetAndHideProgressbar(album: Album = null) {
+  resetAndHideAlbumForm(album: Album = null) {
     if (!!album) {
       this.setProgressbar(false, album);
       this.setAlbumForm(false, album);
@@ -130,5 +113,15 @@ export class AlbumListSandbox {
       this.setProgressbar(false);
       this.setAlbumForm(false);
     }
+  }
+
+  uploadAlbumDataToFirebase(album: Album): Promise<Album> {
+    return this._firebaseService.addAlbum(album)
+      .then(response => {
+          album.id = response.id;
+          this._firebaseService.updateAlbum(album);
+          return Promise.resolve(album);
+        }
+      );
   }
 }
